@@ -217,7 +217,7 @@ class LoginFragment : Fragment() {
 
     }
     private fun addDataTOFirestore(){
-        var user= hashMapOf("email" to email,
+        val user= hashMapOf("email" to email,
             "password" to password)
             database.collection("userdetails")
                 //.add(user as Map<String, Any>)
@@ -225,6 +225,7 @@ class LoginFragment : Fragment() {
         //db.collection("User").document(mAuth.currentUser!!.uid).set(user as Map<String, Any>)
             .addOnCompleteListener { documentReference->
                 Log.i("data added", "DocumentSnapshot added with ID")
+
             }
             .addOnFailureListener { documentRefrence->
                 Log.i("data not added", "Error adding document")

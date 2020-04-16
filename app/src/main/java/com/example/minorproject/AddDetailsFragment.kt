@@ -19,6 +19,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.android.gms.common.wrappers.Wrappers.packageManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -42,7 +43,9 @@ class AddDetailsFragment : Fragment() {
     lateinit var db: FirebaseFirestore
     lateinit var storageRef: StorageReference
     lateinit var mAuth: FirebaseAuth
-    private var filepath: Uri? = null
+    private var user:FirebaseUser?=null
+    private  var filepath: Uri?=null
+    private lateinit var url:String
 
     //lateinit var newCategory:EditText
     //lateinit var newCategoryImage:String
@@ -66,18 +69,33 @@ class AddDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initUi()
+        Log.i("activity created","activity created")
     }
+
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        initUi()
+//        Log.i("view created","view created")
+//
+//    }
 
     private fun initUi() {
         db = FirebaseFirestore.getInstance()
         mAuth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
         storageRef = storage.reference
+        user= mAuth.getCurrentUser()
+
 
         savebutton_add_details_fragment.setOnClickListener(View.OnClickListener {
             //            //add this new category(image and edit text to recyclerview)
             //return back to add_category_fragment(recyclerview waala fragment)
-            sendImageAndTitleToFireStore()
+            sendImageToFireStore()
+            newCategoryName=edittext_add_details_fragment.text.toString()
+
+
+
 
 
         })
@@ -88,11 +106,22 @@ class AddDetailsFragment : Fragment() {
 
         })
 
+        if(url!=null) {
+            Log.i("if mei aaye", "if mei aye")
+            Glide.with(this.context!!).load(url).into(imageView_add_details_fragment)
+            Log.i("url in glide", url)
+
+
+        }
+        else{
+            Log.i("if mei ni aaye", "if mei ni aye")
+        }
+
     }
 
     private fun chooseImage() {
         val options = arrayOf("Take Photo", "Choose From Gallery", "Cancel")
-        val builder = AlertDialog.Builder(context)
+        val builder = MaterialAlertDialogBuilder(context)
         with(builder) {
             setItems(options) { dialog, which ->
                 if (options[which].equals("TakePhoto")) {
@@ -147,21 +176,59 @@ class AddDetailsFragment : Fragment() {
 
     }
 
-    private fun sendImageAndTitleToFireStore() {
-
+    private fun sendImageToFireStore() {
+     val uid: String? = mAuth.currentUser?.uid
         if (filepath != null) {
-            val imageRef = storageRef.child("images/" + UUID.randomUUID().toString())
+            //val imageRef = storageRef.child("images/" + UUID.randomUUID().toString())
+            val imageRef = storageRef.child("images/")
+                .child(uid+".jpeg")
             imageRef.putFile(filepath!!)
                 .addOnSuccessListener {
                     Log.i("on success", "uploaded")
+                    downloadUrl(imageRef)
 
                 }
                 .addOnFailureListener {
                     Log.i("on failure", "not uploaded")
 
                 }
+
         }
     }
+    private fun downloadUrl(imageRef: StorageReference){
+        imageRef.getDownloadUrl()
+            .addOnSuccessListener {
+                url= it.toString()
+                Log.i(" image url",url)
+                sendUrlToCollection()
+//                if(url!=null) {
+//                    Log.i("if mei aaye", "if mei aye")
+//                    Glide.with(this.context!!).load(url).into(imageView_add_details_fragment)
+//                    Log.i("url in glide", url)
+//
+//
+//                }
+//                else{
+//                    Log.i("if mei ni  aaye", "if mei ni aye")
+//                }
+
+            }
+
+
+    }
+    private fun sendUrlToCollection(){
+        val imageDetails= hashMapOf("categorynameimage" to url ,"categorytitle" to newCategoryName)
+        db.collection("categorynameimages")
+            .document(mAuth.currentUser!!.uid)
+            .set(imageDetails as Map<*, *> )
+            .addOnCompleteListener {
+                Log.i("data added", "DocumentSnapshot added with ID")
+            }
+            .addOnFailureListener {
+                Log.i("data not added", "Error adding document")
+            }
+    }
+
 }
 
 
