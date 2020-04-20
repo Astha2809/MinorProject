@@ -90,7 +90,7 @@ class AddDetailsFragment : Fragment() {
 
         savebutton_add_details_fragment.setOnClickListener(View.OnClickListener {
             //            //add this new category(image and edit text to recyclerview)
-            //return back to add_category_fragment(rimecyclerview waala fragment)
+            //return back to category_list_fragment(rimecyclerview waala fragment)
             sendImageToFireStore()
             newCategoryName = edittext_add_details_fragment.text.toString()
 
