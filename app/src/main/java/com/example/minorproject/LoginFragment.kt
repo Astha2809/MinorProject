@@ -222,6 +222,7 @@ class LoginFragment : Fragment() {
             database.collection("userdetails")
                 //.add(user as Map<String, Any>)
                 .document(mAuth.currentUser!!.uid).set(user as Map<String,Any>)
+              // database.collection("users").document(mAuth.currentUser!!.uid) .collection("categorynameimages")
         //db.collection("User").document(mAuth.currentUser!!.uid).set(user as Map<String, Any>)
             .addOnCompleteListener { documentReference->
                 Log.i("data added", "DocumentSnapshot added with ID")

@@ -22,12 +22,15 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.android.gms.common.wrappers.Wrappers.packageManager
+import com.google.android.gms.tasks.Task
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.add_details_fragment.*
@@ -43,9 +46,9 @@ class AddDetailsFragment : Fragment() {
     lateinit var db: FirebaseFirestore
     lateinit var storageRef: StorageReference
     lateinit var mAuth: FirebaseAuth
-    private var user:FirebaseUser?=null
-    private  var filepath: Uri?=null
-    private lateinit var url:String
+    private var user: FirebaseUser? = null
+    private var filepath: Uri? = null
+    public lateinit var url: String
 
     //lateinit var newCategory:EditText
     //lateinit var newCategoryImage:String
@@ -60,8 +63,6 @@ class AddDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.add_details_fragment, container, false)
-
-        //initUi()
         return rootView
 
     }
@@ -69,33 +70,29 @@ class AddDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initUi()
-        Log.i("activity created","activity created")
+        Log.i("activity created", "activity created")
     }
 
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        initUi()
-//        Log.i("view created","view created")
-//
-//    }
 
     private fun initUi() {
         db = FirebaseFirestore.getInstance()
         mAuth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
         storageRef = storage.reference
-        user= mAuth.getCurrentUser()
+        user = mAuth.getCurrentUser()
+//     val aa: Task<QuerySnapshot> =  db.collection("categorynameimages").get("zmyrYKq4FTZEk9tI6I2ZB8q5wzh1")
+//            db.collection("categorynameimages")
+
+        // Log.i("aaki value", aa.toString())
+        //downloadUrl()
+        val aa = db.collection("categorynameimages")
 
 
         savebutton_add_details_fragment.setOnClickListener(View.OnClickListener {
             //            //add this new category(image and edit text to recyclerview)
-            //return back to add_category_fragment(recyclerview waala fragment)
+            //return back to add_category_fragment(rimecyclerview waala fragment)
             sendImageToFireStore()
-            newCategoryName=edittext_add_details_fragment.text.toString()
-
-
-
+            newCategoryName = edittext_add_details_fragment.text.toString()
 
 
         })
@@ -106,16 +103,16 @@ class AddDetailsFragment : Fragment() {
 
         })
 
-        if(url!=null) {
-            Log.i("if mei aaye", "if mei aye")
-            Glide.with(this.context!!).load(url).into(imageView_add_details_fragment)
-            Log.i("url in glide", url)
-
-
-        }
-        else{
-            Log.i("if mei ni aaye", "if mei ni aye")
-        }
+//        if(url!=null) {
+//            Log.i("if mei aaye", "if mei aye")
+//            Glide.with(this.context!!).load(url).into(imageView_add_details_fragment)
+//            Log.i("url in glide", url)
+//
+//
+//        }
+//        else{
+//            Log.i("if mei ni aaye", "if mei ni aye")
+//        }
 
     }
 
@@ -158,10 +155,9 @@ class AddDetailsFragment : Fragment() {
                 imageView_add_details_fragment.setImageURI(data.data)
 
 
-
             }
 
-            8516 -> if (resultCode == RESULT_OK && data!=null && data.data!=null) {
+            8516 -> if (resultCode == RESULT_OK && data != null && data.data != null) {
                 Log.i("INtent ki value", data.toString())
 
                 filepath = data.getData()
@@ -177,11 +173,11 @@ class AddDetailsFragment : Fragment() {
     }
 
     private fun sendImageToFireStore() {
-     val uid: String? = mAuth.currentUser?.uid
+        // val uid: String? = mAuth.currentUser?.uid
         if (filepath != null) {
-            //val imageRef = storageRef.child("images/" + UUID.randomUUID().toString())
-            val imageRef = storageRef.child("images/")
-                .child(uid+".jpeg")
+            val imageRef = storageRef.child("images/" + UUID.randomUUID().toString())
+//            val imageRef = storageRef.child("images/")
+//                .child(" "+ ".jpeg")
             imageRef.putFile(filepath!!)
                 .addOnSuccessListener {
                     Log.i("on success", "uploaded")
@@ -195,32 +191,33 @@ class AddDetailsFragment : Fragment() {
 
         }
     }
-    private fun downloadUrl(imageRef: StorageReference){
+
+    private fun downloadUrl(imageRef: StorageReference) {
         imageRef.getDownloadUrl()
             .addOnSuccessListener {
-                url= it.toString()
-                Log.i(" image url",url)
+                url = it.toString()
+                Log.i("17/april/2020 image url", url)
                 sendUrlToCollection()
-//                if(url!=null) {
-//                    Log.i("if mei aaye", "if mei aye")
-//                    Glide.with(this.context!!).load(url).into(imageView_add_details_fragment)
-//                    Log.i("url in glide", url)
-//
-//
-//                }
-//                else{
-//                    Log.i("if mei ni  aaye", "if mei ni aye")
-//                }
+                if (url != null) {
+                    Log.i("if mei aaye", "if mei aye")
+                    Glide.with(this.context!!).load(url).into(imageView_add_details_fragment)
+                    Log.i("17/april/2020urlinglide", url)
+
+
+                } else {
+                    Log.i("if mei ni  aaye", "if mei ni aye")
+                }
 
             }
 
 
     }
-    private fun sendUrlToCollection(){
-        val imageDetails= hashMapOf("categorynameimage" to url ,"categorytitle" to newCategoryName)
+
+    private fun sendUrlToCollection() {
+        val imageDetails = hashMapOf("categorynameimage" to url, "categorytitle" to newCategoryName)
         db.collection("categorynameimages")
             .document(mAuth.currentUser!!.uid)
-            .set(imageDetails as Map<*, *> )
+            .set(imageDetails as Map<*, *>)
             .addOnCompleteListener {
                 Log.i("data added", "DocumentSnapshot added with ID")
             }
@@ -230,6 +227,7 @@ class AddDetailsFragment : Fragment() {
     }
 
 }
+
 
 
 
