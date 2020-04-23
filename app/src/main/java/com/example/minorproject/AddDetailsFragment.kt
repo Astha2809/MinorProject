@@ -49,6 +49,10 @@ class AddDetailsFragment : Fragment() {
     private var user: FirebaseUser? = null
     private var filepath: Uri? = null
     public lateinit var url: String
+    var uid: String?=null
+    var titleKey:String="categorytitle"
+    var imageKey:String="categorynameimage"
+    var isCategory:Boolean=true
 
     //lateinit var newCategory:EditText
     //lateinit var newCategoryImage:String
@@ -71,6 +75,29 @@ class AddDetailsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         initUi()
         Log.i("activity created", "activity created")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //Log.i("on create", "on create")
+
+        arguments?.let{
+            isCategory= it.getBoolean("isCategory")
+            Log.i("on create", "on create")
+
+            if (!isCategory){
+                Log.i("if is category", isCategory.toString())
+                imageKey="subcategoryimage"
+                titleKey="subcategorytitle"
+            }
+            else{
+                Log.i("is categoryindetails", isCategory.toString())
+            }
+        }
+
+
+
+
     }
 
 
@@ -102,18 +129,6 @@ class AddDetailsFragment : Fragment() {
             chooseImage()
 
         })
-
-//        if(url!=null) {
-//            Log.i("if mei aaye", "if mei aye")
-//            Glide.with(this.context!!).load(url).into(imageView_add_details_fragment)
-//            Log.i("url in glide", url)
-//
-//
-//        }
-//        else{
-//            Log.i("if mei ni aaye", "if mei ni aye")
-//        }
-
     }
 
     private fun chooseImage() {
@@ -173,7 +188,7 @@ class AddDetailsFragment : Fragment() {
     }
 
     private fun sendImageToFireStore() {
-        // val uid: String? = mAuth.currentUser?.uid
+         uid = mAuth.currentUser?.uid
         if (filepath != null) {
             val imageRef = storageRef.child("images/" + UUID.randomUUID().toString())
 //            val imageRef = storageRef.child("images/")
@@ -197,7 +212,14 @@ class AddDetailsFragment : Fragment() {
             .addOnSuccessListener {
                 url = it.toString()
                 Log.i("17/april/2020 image url", url)
-                sendUrlToCollection()
+               if (!isCategory) {
+                   Log.i("sub cat called", "sub cat called")
+                    sendUrlToSubCategoryCollection()
+                }
+                else{
+                   Log.i("catg called", "catg called")
+                    sendUrlToCategoryCollection()
+                }
                 if (url != null) {
                     Log.i("if mei aaye", "if mei aye")
                     Glide.with(this.context!!).load(url).into(imageView_add_details_fragment)
@@ -213,11 +235,24 @@ class AddDetailsFragment : Fragment() {
 
     }
 
-    private fun sendUrlToCollection() {
-        val imageDetails = hashMapOf("categorynameimage" to url, "categorytitle" to newCategoryName)
+    private fun sendUrlToCategoryCollection() {
+        val imageDetails = hashMapOf(imageKey to url, titleKey to newCategoryName,"imageid" to uid)
         db.collection("categorynameimages")
-            .document(mAuth.currentUser!!.uid)
-            .set(imageDetails as Map<*, *>)
+           // .document(mAuth.currentUser!!.uid)
+            .add(imageDetails as Map<*, *>)
+            .addOnCompleteListener {
+                Log.i("data added", "DocumentSnapshot added with ID")
+            }
+            .addOnFailureListener {
+                Log.i("data not added", "Error adding document")
+            }
+    }
+
+
+   private fun sendUrlToSubCategoryCollection(){
+       val imageDetails= hashMapOf(imageKey to url,titleKey to newCategoryName,"imageid" to uid)
+        db.collection("subCategory").document(mAuth.currentUser!!.uid)
+            .set(imageDetails as Map<*,*>)
             .addOnCompleteListener {
                 Log.i("data added", "DocumentSnapshot added with ID")
             }

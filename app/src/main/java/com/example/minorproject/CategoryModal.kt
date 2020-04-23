@@ -1,6 +1,7 @@
 package com.example.minorproject
 
 import android.net.Uri
+import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
 
 ////class CategoryModal(val categoryTitle:String="", val categoryImage:Uri) {
@@ -22,6 +23,12 @@ import com.bumptech.glide.Glide
 ////}
  class CategoryModal (val imageTitle: String?=null,
                            val imageUrl: String?= null){
+
+//    fun getData():LiveData<CategoryModal>{
+//        var savedData:LiveData<CategoryModal>
+//        return savedData
+//
+//    }
 
 }
 

@@ -6,13 +6,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.minorproject.CategoryModal
+import com.example.minorproject.*
 
-import com.example.minorproject.R
-
-class CategoryListFragmentAdapter(var context: Context, var catogaryList: List<CategoryModal>) :
+class CategoryListFragmentAdapter(var context: Context) :
     RecyclerView.Adapter<CategoryListFragmentAdapter.ItemViewHolder>() {
-
+    //private var categoryListFragmentAdapter: CategoryListFragmentAdapter? = null
+private var catogaryList:List<CategoryModal>?=null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
 
@@ -23,21 +22,35 @@ class CategoryListFragmentAdapter(var context: Context, var catogaryList: List<C
     }
 
     override fun getItemCount():
-            Int = catogaryList.size
+            Int = catogaryList?.size?:0
 
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
-        val categoryModal: CategoryModal = catogaryList[position]
-        holder.categoryTitleTextView.text = categoryModal.imageTitle
+        val categoryModal: CategoryModal? = catogaryList?.get(position)
+        if (categoryModal != null) {
+            holder.categoryTitleTextView.text = categoryModal.imageTitle
+        }
 
-        Glide.with(context).load(categoryModal.imageUrl).into(holder.categoryImageImageView)
+        if (categoryModal != null) {
+            Glide.with(context).load(categoryModal.imageUrl).into(holder.categoryImageImageView)
+        }
 
         holder.categoryImageImageView.setOnClickListener(View.OnClickListener {
-            movetonewfragment()
+
+            holder.categoryTitleTextView.setText("")
+            holder.categoryImageImageView.setImageURI(null)
+            relodeFragment()
+          //  categoryListFragmentAdapter?.notifyDataSetChanged()
+
         })
 
 
+    }
+
+    fun setData(catogaryList: List<CategoryModal>) {
+        this.catogaryList = catogaryList
+        notifyDataSetChanged()
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -47,10 +60,20 @@ class CategoryListFragmentAdapter(var context: Context, var catogaryList: List<C
             itemView.findViewById(R.id.categoryname_textview_categorylist)
         val categoryImageImageView: ImageView = itemView.findViewById(R.id.image_categorylist)
 
-    }
-
-    private fun movetonewfragment() {
 
     }
+
+    private fun relodeFragment() {
+        val addDetailsFragment = AddDetailsFragment()
+
+        //?why to write activity here?
+        val fragmentTransaction =
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, addDetailsFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+    }
+
 
 }
