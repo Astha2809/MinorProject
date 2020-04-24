@@ -4,13 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.QuerySnapshot
 
 class CategoryViewModel : ViewModel( ) {
     //var addCategoryFragment = AddCategoryFragment()
     var firebaseRepository=FirebaseRepository()
-    var savedDetails: MutableLiveData<List<CategoryModal>> = MutableLiveData()
+    //var savedDetails: MutableLiveData<List<CategoryModal>> = MutableLiveData()
     var allData: MutableLiveData<ArrayList<CategoryModal>> = MutableLiveData()
 
     /*fun getSavedDetails(): LiveData<List<CategoryModal>> {
@@ -42,7 +40,9 @@ class CategoryViewModel : ViewModel( ) {
     }
     fun loadImages():LiveData<ArrayList<CategoryModal>> {
         allData=firebaseRepository.loadImages()
+        Log.i("all dta", allData.toString())
         return allData
+
     }
 
 }

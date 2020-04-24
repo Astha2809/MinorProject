@@ -1,7 +1,7 @@
 package com.example.minorproject
 
 
-import CategoryListFragmentAdapter
+//import CategoryListFragmentAdapter
 //import CategoryModal
 import android.os.Bundle
 import android.util.Log
@@ -29,8 +29,7 @@ class CategoryListFragment : Fragment() {
     lateinit var database: FirebaseFirestore
     lateinit var storageRef: StorageReference
     private lateinit var storage: FirebaseStorage
- //   private var categryList: ArrayList<CategoryModal>? = null
-    private lateinit var categryList: LiveData<List<CategoryModal>>
+    private lateinit var categryList: LiveData<ArrayList<CategoryModal>>
     var currentScreen= categoryListScreen
     var isCategory:Boolean = true
      var categoryListFragmentAdapter:CategoryListFragmentAdapter? =null
@@ -78,9 +77,11 @@ class CategoryListFragment : Fragment() {
             //arguments?.let{
             //  isCategory= it.getBoolean("isCategory")
             //categryList = ArrayList()
-            // categryList=loadImages()
+
        // var categoryViewModel=ViewModelProvider.of()
         categoryViewModel=ViewModelProvider(activity!!).get(CategoryViewModel::class.java)
+
+        categryList=categoryViewModel.loadImages()
 
        // categryList=categoryViewModel.getSavedDetails()
 
@@ -96,12 +97,9 @@ class CategoryListFragment : Fragment() {
             recycler.adapter = categoryListFragmentAdapter
 
 
-            //loadImages()
-            //var user=mAuth.currentUser
 
-            //getSavedDetails()
-//        categoryViewModel=ViewModelProvider(activity!!).get(CategoryViewModel::class.java)
-//        categoryViewModel.getSavedDetails()
+
+
 
 
             addbutton_add_categoy.setOnClickListener(View.OnClickListener {
@@ -110,7 +108,7 @@ class CategoryListFragment : Fragment() {
 
             })
         //ViewModel
-        categoryViewModel=ViewModelProvider(activity!!).get(CategoryViewModel::class.java)
+
       categoryViewModel.allData.observe(viewLifecycleOwner, Observer<ArrayList<CategoryModal>>{ list->
             list.let {
                 categoryListFragmentAdapter?.setData(it)
@@ -123,12 +121,8 @@ class CategoryListFragment : Fragment() {
 
     //funtion to replace addcategorydetails fragment to open new fragment for adding title and image of catogary
     private fun openAddDetailsFragment() {
-
-
         val addDetailsFragment = AddDetailsFragment()
-
         //?why to write activity here?
-
         val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.container,addDetailsFragment)
         fragmentTransaction.addToBackStack(null)
@@ -170,7 +164,7 @@ class CategoryListFragment : Fragment() {
 //        return collectionReference
 
 
-    private fun loadSubCategoryImages():ArrayList<CategoryModal>{
+    /*private fun loadSubCategoryImages():ArrayList<CategoryModal>{
     var subCatItems:ArrayList<CategoryModal> =ArrayList()
     database.collection("categorynameimages").document().collection("subcategoryimages")
         .get()
@@ -184,7 +178,7 @@ class CategoryListFragment : Fragment() {
             }
         }
     return subCatItems
-}
+}*/
 
 
 }
