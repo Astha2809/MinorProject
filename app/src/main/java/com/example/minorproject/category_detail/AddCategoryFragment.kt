@@ -1,11 +1,7 @@
-package com.example.minorproject
+package com.example.minorproject.category_detail
 
 import android.app.Activity.RESULT_OK
-import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,31 +10,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.google.android.gms.auth.api.signin.internal.Storage
-import com.google.android.gms.common.wrappers.Wrappers.packageManager
-import com.google.android.gms.tasks.Task
+import com.example.minorproject.R
+import com.example.minorproject.category.ui.CategoryListFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.add_details_fragment.*
-import java.io.ByteArrayOutputStream
-import java.lang.Exception
 import java.util.*
 
-class AddDetailsFragment : Fragment() {
+class AddCategoryFragment : Fragment() {
     lateinit var rootView: View
     //    lateinit var selectedImage1: Bitmap
 //    lateinit var selectedImage:Uri
@@ -54,11 +40,6 @@ class AddDetailsFragment : Fragment() {
     var imageKey:String="categorynameimage"
     var isCategory:Boolean=true
 
-    //lateinit var newCategory:EditText
-    //lateinit var newCategoryImage:String
-    //lateinit var saveCategoryButton:Button
-//    lateinit var fstorage: FirebaseStorage
-//    lateinit var aa:FirebaseFirestore
 
     lateinit var newCategoryName: String
     override fun onCreateView(
@@ -119,6 +100,7 @@ class AddDetailsFragment : Fragment() {
             //            //add this new category(image and edit text to recyclerview)
             //return back to category_list_fragment(rimecyclerview waala fragment)
             sendImageToFireStore()
+
             newCategoryName = edittext_add_details_fragment.text.toString()
 
 
@@ -214,7 +196,7 @@ class AddDetailsFragment : Fragment() {
                 Log.i("17/april/2020 image url", url)
                if (!isCategory) {
                    Log.i("sub cat called", "sub cat called")
-                    sendUrlToSubCategoryCollection()
+                    //sendUrlToSubCategoryCollection()
                 }
                 else{
                    Log.i("catg called", "catg called")
@@ -241,6 +223,7 @@ class AddDetailsFragment : Fragment() {
            // .document(mAuth.currentUser!!.uid)
             .add(imageDetails as Map<*, *>)
             .addOnCompleteListener {
+                //openCategoryListFragment()
                 Log.i("data added", "DocumentSnapshot added with ID")
             }
             .addOnFailureListener {
@@ -249,16 +232,23 @@ class AddDetailsFragment : Fragment() {
     }
 
 
-   private fun sendUrlToSubCategoryCollection(){
-       val imageDetails= hashMapOf(imageKey to url,titleKey to newCategoryName,"imageid" to uid)
-        db.collection("subCategory").document(mAuth.currentUser!!.uid)
-            .set(imageDetails as Map<*,*>)
-            .addOnCompleteListener {
-                Log.i("data added", "DocumentSnapshot added with ID")
-            }
-            .addOnFailureListener {
-                Log.i("data not added", "Error adding document")
-            }
+//   private fun sendUrlToSubCategoryCollection(){
+//       val imageDetails= hashMapOf(imageKey to url,titleKey to newCategoryName,"imageid" to uid)
+//        db.collection("subCategory").document(mAuth.currentUser!!.uid)
+//            .set(imageDetails as Map<*,*>)
+//            .addOnCompleteListener {
+//                Log.i("data added", "DocumentSnapshot added with ID")
+//            }
+//            .addOnFailureListener {
+//                Log.i("data not added", "Error adding document")
+//            }
+//    }
+    private fun openCategoryListFragment(){
+        val fragment= CategoryListFragment()
+        val fragmentTransaction=activity!!.supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.container,fragment)
+        fragmentTransaction.addToBackStack("return")
+        fragmentTransaction.commit()
     }
 
 }

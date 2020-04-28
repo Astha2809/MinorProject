@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-
+    android:id="@+id/catogary_content_list"
     android:padding="20dp">
 
     <ImageView
@@ -14,6 +14,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="5dp"
         android:background="#DCD1D1"
+        android:scaleType="fitXY"
         tools:src="@drawable/ic_add_black_24dp"
 
         />

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_add_details_fragment"
     android:layout_width="match_parent"
-
+    android:background="#FFFFFF"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
@@ -35,9 +35,12 @@
         android:layout_marginStart="124dp"
         android:layout_marginLeft="124dp"
         android:layout_marginBottom="60dp"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:background="@drawable/rounded_text"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Image Name"
         app:layout_constraintBottom_toTopOf="@+id/guidline_center_adddetailsfragment"
         app:layout_constraintStart_toStartOf="parent" />
 

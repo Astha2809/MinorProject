@@ -4,14 +4,20 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     android:id="@+id/linear_loginfragment"
     >
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:textStyle="bold"
+        android:padding="10dp"
         android:id="@+id/edittext_email"
         android:layout_gravity="center"
+        android:background="@drawable/rounded_text"
         android:layout_marginTop="180dp"
         android:hint="@string/enter_email"
         />

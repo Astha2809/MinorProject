@@ -1,4 +1,4 @@
-package com.example.minorproject
+package com.example.minorproject.login
 
 import android.os.Bundle
 import android.text.InputType
@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import com.example.minorproject.R
+import com.example.minorproject.category.ui.CategoryListFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -237,7 +239,7 @@ class LoginFragment : Fragment() {
     }
 
 private fun moveToNextScreen(){
-    val fragment=CategoryListFragment()
+    val fragment= CategoryListFragment()
     //val fragmentTransaction=supportFragmentManager.
     val fragmentTransaction=activity!!.supportFragmentManager.beginTransaction()
     fragmentTransaction.replace(R.id.container,fragment)

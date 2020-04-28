@@ -1,15 +1,16 @@
-package com.example.minorproject
+package com.example.minorproject.category.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.minorproject.FirebaseRepository
 
 class CategoryViewModel : ViewModel( ) {
     //var addCategoryFragment = AddCategoryFragment()
-    var firebaseRepository=FirebaseRepository()
+    var firebaseRepository= FirebaseRepository()
     //var savedDetails: MutableLiveData<List<CategoryModal>> = MutableLiveData()
-    var allData: MutableLiveData<ArrayList<CategoryModal>> = MutableLiveData()
+    var categoryData: MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
 
     /*fun getSavedDetails(): LiveData<List<CategoryModal>> {
         firebaseRepository.getSavedDetails()
@@ -35,13 +36,15 @@ class CategoryViewModel : ViewModel( ) {
 
     }*/
     init {
-        loadImages()
+        loadCategoryToRecycler()
 
     }
-    fun loadImages():LiveData<ArrayList<CategoryModal>> {
-        allData=firebaseRepository.loadImages()
-        Log.i("all dta", allData.toString())
-        return allData
+    fun loadCategoryToRecycler():LiveData<ArrayList<CategoryModel>> {
+       categoryData= firebaseRepository.loadCategoryToRecycler()
+
+
+        Log.i("category", categoryData.toString())
+        return categoryData
 
     }
 
