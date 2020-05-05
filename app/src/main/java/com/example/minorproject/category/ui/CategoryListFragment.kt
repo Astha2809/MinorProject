@@ -81,7 +81,7 @@ class CategoryListFragment : Fragment() {
 
         arguments?.let {
             isCategory = it.getBoolean("isCategory")
-            //categryList = ArrayList()
+
         }
 
 
@@ -133,54 +133,6 @@ class CategoryListFragment : Fragment() {
 
     }
 
-    /* private fun loadImages(): ArrayList<CategoryModal> {
-         //imageList= ArrayList()
-         var items: ArrayList<CategoryModal> = ArrayList()
-
-         database.collection("categorynameimages")
-             .get()
-             .addOnCompleteListener { task ->
-                 if (task.isSuccessful) {
-                     for (document in task.result!!) {
-                         var imageTitle = document.data.get("categorytitle").toString()
-                         var imageUrl = document.data.get("categorynameimage").toString()
-                         Log.i("imagetitle", imageTitle)
-                         Log.i("imageurl", imageUrl)
-
-                         val bb = items.add(CategoryModal(imageTitle, imageUrl))
-                         Log.i("bb ki value", bb.toString())
-                     }
-                     // val addCategoryFragmentAdapter= context?.let { AddCategoryFragmentAdapter(it, categryList!!) }
-                     //recycler.adapter=addCategoryFragmentAdapter
-
-
-                 }
-
-             }
-
-
-         return items
-     }*/
-//fun getSavedDetails():CollectionReference{
-//    val collectionReference=database.collection("categorynameimages")
-//        return collectionReference
-
-
-    /*private fun loadSubCategoryImages():ArrayList<CategoryModal>{
-    var subCatItems:ArrayList<CategoryModal> =ArrayList()
-    database.collection("categorynameimages").document().collection("subcategoryimages")
-        .get()
-        .addOnCompleteListener { task ->
-            if(task.isSuccessful){
-                for(document in task.result!!){
-                    var subCatImgTitle=document.data.get("subcattitle").toString()
-                    var subCatImgUrl=document.data.get("subcatname").toString()
-                    val cc=subCatItems.add(CategoryModal(subCatImgTitle,subCatImgUrl))
-                }
-            }
-        }
-    return subCatItems
-}*/
 
 
 }

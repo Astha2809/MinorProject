@@ -14,7 +14,7 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         android:orientation="vertical"
-        android:padding="12dp"
+        android:padding="@dimen/textboxes_padding"
         tools:listitem="@layout/catogary_content_list"
 
 

@@ -1,5 +1,8 @@
 package com.example.minorproject.login
 
+//import com.google.firebase.auth.ProviderQueryResult
+import android.app.ActionBar
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -8,14 +11,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.example.minorproject.MainActivity
 import com.example.minorproject.R
 import com.example.minorproject.category.ui.CategoryListFragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-//import com.google.firebase.auth.ProviderQueryResult
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.loginfragment.*
 
 const val emailScreen: Int = 0
@@ -34,12 +40,13 @@ class LoginFragment : Fragment() {
     lateinit var email: String
     lateinit var password: String
     var currentScreen = emailScreen
-
+  //  lateinit var sp:SharedPreferences
    lateinit var database:FirebaseFirestore
 
    // val editTextEmail by lazy { view!!.findViewById<EditText>(R.id.edittext_email) }
 
     // private var mAuth: FirebaseAuth? = null
+
 
 
     override fun onCreateView(
@@ -50,16 +57,27 @@ class LoginFragment : Fragment() {
     ): View? {
 
         rootView = inflater.inflate(R.layout.loginfragment, container, false)
-
+           //hidenav()
+//        val actionBar: ActionBar? =activity?.actionBar
+//        actionBar?.hide()
+        //(requireActivity() as MainActivity).supportActionBar!!.hide()
 
         return rootView
 
     }
 
     private fun initUi() {
+
+//        activity?.window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+
+
         mAuth = FirebaseAuth.getInstance()
+       // sp=getSharedPreferences("login", Context.MODE_PRIVATE)
 
         database= FirebaseFirestore.getInstance()
+
 
         next.setOnClickListener(View.OnClickListener {
             if (currentScreen == emailScreen) {
@@ -84,7 +102,23 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         initUi()
+
+
+    }
+
+    fun hidenav(){
+        activity?.window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        // Set the content to appear under the system bars so that the
+        // content doesn't resize when the system bars hide and show.
+        or  View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+       // or  View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        // Hide the nav bar and status bar
+        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        or View.SYSTEM_UI_FLAG_FULLSCREEN)
+
+
 
 
     }
@@ -160,7 +194,11 @@ class LoginFragment : Fragment() {
                // Log.i("login error",task.exception?.message)
                 moveToNextScreen()
                // val aa: Int? = task.getResult()?.signInMethods?.size
-            } else {
+                //sp.edit().putBoolean("logged",true).apply()
+                //Log.i("sp", sp.toString())
+            }
+
+            else {
 
                 snack= Snackbar.make(linear_loginfragment,"cant log in",Snackbar.LENGTH_LONG)
                 snack.setAction("DISMISS",View.OnClickListener {
@@ -213,11 +251,10 @@ class LoginFragment : Fragment() {
 
     }
     private fun addDataTOFirestore(){
-        val user= hashMapOf("email" to email,
-            "password" to password)
+        val user= hashMapOf("email" to email)
             database.collection("userdetails")
                 //.add(user as Map<String, Any>)
-                .document(mAuth.currentUser!!.uid).set(user as Map<String,Any>)
+                .document(mAuth.currentUser!!.uid).set(user as Map<String,Any>, SetOptions.merge())
               // database.collection("users").document(mAuth.currentUser!!.uid) .collection("categorynameimages")
         //db.collection("User").document(mAuth.currentUser!!.uid).set(user as Map<String, Any>)
             .addOnCompleteListener { documentReference->

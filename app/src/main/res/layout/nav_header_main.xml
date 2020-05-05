@@ -13,7 +13,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageView_nav_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/nav_header_desc"
@@ -24,13 +24,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/nav_header_title"
+        android:text="username"
+        android:id="@+id/textview_username_nav_header"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_useremail_nav_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_header_subtitle" />
+        android:text="Email" />
 
 </LinearLayout>

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.minorproject.R
 import com.example.minorproject.category.ui.CategoryListFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,19 +27,18 @@ import java.util.*
 
 class AddCategoryFragment : Fragment() {
     lateinit var rootView: View
-    //    lateinit var selectedImage1: Bitmap
-//    lateinit var selectedImage:Uri
     private lateinit var storage: FirebaseStorage
     lateinit var db: FirebaseFirestore
     lateinit var storageRef: StorageReference
     lateinit var mAuth: FirebaseAuth
     private var user: FirebaseUser? = null
     private var filepath: Uri? = null
-    public lateinit var url: String
+     lateinit var url: String
     var uid: String?=null
     var titleKey:String="categorytitle"
     var imageKey:String="categorynameimage"
     var isCategory:Boolean=true
+    lateinit var snack: Snackbar
 
 
     lateinit var newCategoryName: String
@@ -91,8 +91,7 @@ class AddCategoryFragment : Fragment() {
 //     val aa: Task<QuerySnapshot> =  db.collection("categorynameimages").get("zmyrYKq4FTZEk9tI6I2ZB8q5wzh1")
 //            db.collection("categorynameimages")
 
-        // Log.i("aaki value", aa.toString())
-        //downloadUrl()
+
         val aa = db.collection("categorynameimages")
 
 
@@ -173,8 +172,7 @@ class AddCategoryFragment : Fragment() {
          uid = mAuth.currentUser?.uid
         if (filepath != null) {
             val imageRef = storageRef.child("images/" + UUID.randomUUID().toString())
-//            val imageRef = storageRef.child("images/")
-//                .child(" "+ ".jpeg")
+
             imageRef.putFile(filepath!!)
                 .addOnSuccessListener {
                     Log.i("on success", "uploaded")
@@ -225,30 +223,36 @@ class AddCategoryFragment : Fragment() {
             .addOnCompleteListener {
                 //openCategoryListFragment()
                 Log.i("data added", "DocumentSnapshot added with ID")
+                snack= Snackbar.make(layout_add_details_fragment,"Uploaded",Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS",View.OnClickListener {
+                    System.out.println("snack clicked")
+                })
+                snack.show()
+
+
             }
             .addOnFailureListener {
                 Log.i("data not added", "Error adding document")
+                snack= Snackbar.make(layout_add_details_fragment,"Failed",Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS",View.OnClickListener {
+                    System.out.println("snack clicked")
+                })
+                snack.show()
+
             }
     }
 
 
-//   private fun sendUrlToSubCategoryCollection(){
-//       val imageDetails= hashMapOf(imageKey to url,titleKey to newCategoryName,"imageid" to uid)
-//        db.collection("subCategory").document(mAuth.currentUser!!.uid)
-//            .set(imageDetails as Map<*,*>)
-//            .addOnCompleteListener {
-//                Log.i("data added", "DocumentSnapshot added with ID")
-//            }
-//            .addOnFailureListener {
-//                Log.i("data not added", "Error adding document")
-//            }
-//    }
+
     private fun openCategoryListFragment(){
         val fragment= CategoryListFragment()
-        val fragmentTransaction=activity!!.supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.container,fragment)
-        fragmentTransaction.addToBackStack("return")
-        fragmentTransaction.commit()
+        val fragmentTransaction= activity?.supportFragmentManager?.beginTransaction()
+        if (fragmentTransaction != null) {
+            fragmentTransaction.replace(R.id.container,fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+
     }
 
 }

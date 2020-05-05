@@ -11,14 +11,14 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+       android:layout_marginLeft="@dimen/textboxes_sides_margin"
+        android:layout_marginRight="@dimen/textboxes_sides_margin"
         android:textStyle="bold"
-        android:padding="10dp"
+        android:padding="@dimen/textboxes_padding"
         android:id="@+id/edittext_email"
         android:layout_gravity="center"
         android:background="@drawable/rounded_text"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="@dimen/login_edittext_margintop"
         android:hint="@string/enter_email"
         />
 
@@ -27,8 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/next"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/textbox_margintop"
         android:layout_gravity="center"
-        android:text="Next"/>
+        android:text="@string/buttontext_login_next"/>
 
 </LinearLayout>

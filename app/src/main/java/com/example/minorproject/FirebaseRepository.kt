@@ -1,41 +1,26 @@
 package com.example.minorproject
 
 import android.util.Log
-import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
-import com.example.minorproject.category.adapter.Adapter
 import com.example.minorproject.category.viewmodel.CategoryModel
-import com.example.minorproject.category_detail.AddCategoryFragment
-import com.example.minorproject.category_detail.AddSubCategoryFragment
-
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.storage.FirebaseStorage
+import com.example.minorproject.timeline.ViewModel.TimelineModel
+import com.google.firebase.firestore.*
 import java.util.ArrayList
 
 class FirebaseRepository {
     var database = FirebaseFirestore.getInstance()
-    private lateinit var storage: FirebaseStorage
-//var id:String=bundle
-//lateinit var subCategoryModel:SubCategoryModel
-//var addCategoryFragment=AddCategoryFragment()
-    //var adapter=Adapter()
-    var user = FirebaseAuth.getInstance().currentUser
     var categoryLiveData: MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
-    var subCategoryLiveData:MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
+    var subCategoryLiveData: MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
+    var timelineLiveData: MutableLiveData<ArrayList<TimelineModel>> = MutableLiveData()
+   // var userLiveData: MutableLiveData<List<ProfileModel>> = MutableLiveData()
 
 
     fun loadCategoryToRecycler(): MutableLiveData<ArrayList<CategoryModel>> {
 
         var arrayList: ArrayList<CategoryModel> = ArrayList()
-//        var aa =subCategoryModel.categoryId
-//        Log.i("aa ki value","id"+aa)
+
 
         database.collection("categorynameimages")
-            //.get()
             .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
                 if (e != null) {
                     Log.i("listen failed", "Listen failed.", e)
@@ -65,39 +50,124 @@ class FirebaseRepository {
         return categoryLiveData
     }
 
-    fun loadSubCategoryToRecycler(categoryid:String):MutableLiveData<ArrayList<CategoryModel>>{
+    fun loadSubCategoryToRecycler(
+        categoryid: String,
+        subcategoryid: String
+    ): MutableLiveData<ArrayList<CategoryModel>> {
+
         var arrayList: ArrayList<CategoryModel> = ArrayList()
-       // var aa=subCategoryModel.categoryId
+        // var aa=subCategoryModel.categoryId
 //        var aa =addSubCategoryFragment.categoryId
 //        Log.i("aa ki value","id"+aa)
 
         database.collection("Subcategory").document(categoryid).collection("SubcategoryImages")
-            .addSnapshotListener(EventListener<QuerySnapshot>{value, e ->
-                if(e!=null){
+            .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
+                if (e != null) {
                     Log.i("listen failed", "Listen failed.", e)
-                    subCategoryLiveData.value=null
+                    subCategoryLiveData.value = null
                     return@EventListener
                 }
-                if (value!=null){
-                    for (document:QueryDocumentSnapshot in value){
-                        var subCategoryTitle=document.data.get("subcategorytitle").toString()
-                        var subCategoryImage=document.data.get("subcategoryurl").toString()
+                if (value != null) {
+                    for (document: QueryDocumentSnapshot in value) {
+                        var subcategoryid = document.id
+                        var subCategoryTitle = document.data.get("subcategorytitle").toString()
+                        var subCategoryImage = document.data.get("subcategoryurl").toString()
 
                         Log.i("subcatimagetitle", subCategoryTitle)
                         Log.i("subcatimageurl", subCategoryImage)
 
-                        val items=arrayList.add(CategoryModel(subCategoryTitle,subCategoryImage,categoryid))
+                        val items = arrayList.add(
+                            CategoryModel(
+                                subCategoryTitle,
+                                subCategoryImage,
+                                categoryid, subcategoryid
+                            )
+                        )
                         Log.i("DATA ADDED", items.toString())
 
                     }
                 }
-                subCategoryLiveData.value=arrayList
+                subCategoryLiveData.value = arrayList
                 Log.i("items ki value", "${subCategoryLiveData}")
             })
         return subCategoryLiveData
     }
 
+    fun loadtimelineData(): MutableLiveData<ArrayList<TimelineModel>> {
+        var arrayList: ArrayList<TimelineModel> = ArrayList()
+        database.collection("Timeline").orderBy("timestamp", Query.Direction.DESCENDING)
+            .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
+                if (e != null) {
+                    Log.i("listen failed", "Listen failed.", e)
+                    timelineLiveData.value = null
+                    return@EventListener
+                }
+                if (value != null) {
+                    for (document: QueryDocumentSnapshot in value) {
+                        var timelineTitle = document.data.get("subcategorytitle").toString()
+                        var timelineImage = document.data.get("subcategoryurl").toString()
 
+                        var timelineDate = document.data.get("timestamp").toString()
+
+
+                        Log.i("timelinetitle", timelineTitle)
+                        Log.i("subcatimageurl", timelineImage)
+
+                        Log.i("timelinedate", timelineDate)
+
+
+                        val items = arrayList.add(
+                            TimelineModel(
+                                timelineTitle,
+                                timelineImage,
+                                timelineDate
+                            )
+                        )
+                        Log.i("DATA ADDED", items.toString())
+
+
+                    }
+                }
+                timelineLiveData.value = arrayList
+                Log.i("items ki value", "${timelineLiveData}")
+            })
+        return timelineLiveData
+    }
+
+    /*fun loadUserData(): MutableLiveData<List<ProfileModel>> {
+        var arrayList: ArrayList<ProfileModel> = ArrayList()
+        database.collection("userdetails")
+            .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
+                if (e != null) {
+                    Log.i("listen failed", "Listen failed.", e)
+                    userLiveData.value = null
+                    return@EventListener
+                }
+                if (value != null) {
+                    for (document: QueryDocumentSnapshot in value) {
+                        var userName = document.data.get("username").toString()
+                        var userImage = document.data.get("profile picture").toString()
+                        var userEmail = document.data.get("email").toString()
+                        Log.i("username", userName)
+                        Log.i("userimage", userImage)
+                        Log.i("useremail", userEmail)
+
+                        val items = arrayList.add(
+                            ProfileModel(
+                                userName,
+                                userImage, userEmail
+                            )
+                        )
+                        Log.i("DATA ADDED", items.toString())
+                    }
+                }
+                userLiveData.value = arrayList
+
+            })
+        return userLiveData
+
+
+    }*/
 }
 
 

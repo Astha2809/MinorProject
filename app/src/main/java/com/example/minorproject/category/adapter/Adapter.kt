@@ -13,12 +13,12 @@ import com.bumptech.glide.Glide
 import com.example.minorproject.category.viewmodel.CategoryModel
 import com.example.minorproject.MainActivity
 import com.example.minorproject.R
+import com.example.minorproject.subcategory.ui.DisplaySubCategoryFragment
 import com.example.minorproject.subcategory.ui.SubcategoryFragment
 
 class Adapter(var context: Context) :
     RecyclerView.Adapter<Adapter.ItemViewHolder>() {
-    //private var categoryListFragmentAdapter: CategoryListFragmentAdapter? = null
-    // private var layoutBackground:RelativeLayout?=null
+
 
     private var catogaryList: ArrayList<CategoryModel>? = null
    // private var subCategoryList:ArrayList<SubCategoryModel>? =null
@@ -32,7 +32,7 @@ class Adapter(var context: Context) :
 
     override fun getItemCount():
             Int = catogaryList?.size ?: 0
-//subcategoryLIst ka size b lena hai
+
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
@@ -47,17 +47,20 @@ class Adapter(var context: Context) :
 //
         holder.categoryImageImageView.setOnClickListener(View.OnClickListener {
             //  clearData()
-            val fragment = SubcategoryFragment()
+            val subcategoryfragment = SubcategoryFragment()
+
 
             val bundle = Bundle()
-            bundle.putString("categoryid", categoryModal?.id)
-            Log.i("adapter id", "id" + categoryModal?.id)
+            bundle.putString("categoryid", categoryModal?.id.toString())
+            Log.i("adapter id", "id" + categoryModal?.id.toString())
+            bundle.putString("subcategoryid",categoryModal?.subcategoryid.toString())
+            Log.i("adapter id", "id" + categoryModal?.subcategoryid.toString())
 
-            fragment.arguments = bundle
+            subcategoryfragment.arguments = bundle
 
             val fragmentTransaction =
                 (context as MainActivity).supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.container, fragment)
+            fragmentTransaction.replace(R.id.container, subcategoryfragment)
             fragmentTransaction.addToBackStack(null)
 
 
@@ -65,30 +68,37 @@ class Adapter(var context: Context) :
 
 
         })
+        holder.categoryTitleTextView.setOnClickListener(View.OnClickListener {
+            val displaySubCategoryFragment=DisplaySubCategoryFragment()
+            val bundle1=Bundle()
+            bundle1.putString("categoryid",categoryModal?.id)
+            bundle1.putString("subcategoryid",categoryModal?.subcategoryid.toString())
+            displaySubCategoryFragment.arguments=bundle1
+            val fragmentTransaction =
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.container, displaySubCategoryFragment)
+            fragmentTransaction.addToBackStack(null)
 
-       // if condition lagao
 
-//        val subCategoryModel:SubCategoryModel?=subCategoryList?.get(position)
-//        if (subCategoryModel!=null){
-//           Glide.with(context).load(subCategoryModel.subCategoryImageUrl).into(holder.categoryImageImageView)
-//        }
+            fragmentTransaction.commit()
+
+        })
+
 
 
     }
+
 
     fun setCategoryData(catogaryList: ArrayList<CategoryModel>) {
         this.catogaryList = catogaryList
         notifyDataSetChanged()
     }
-//    fun setSubCategoryData(subCategoryList:ArrayList<CategoryModel>){
-//        this.subCategoryList=subCategoryList
+
+
+//    fun clearData() {
+//        this.catogaryList?.clear()
 //        notifyDataSetChanged()
 //    }
-
-    fun clearData() {
-        this.catogaryList?.clear()
-        notifyDataSetChanged()
-    }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -101,22 +111,7 @@ class Adapter(var context: Context) :
 
     }
 
-//    private fun openSubCategoryFragment() {
-//
-//
-//        val fragment = SubcategoryFragment()
-//
-//        //val fragmentTransaction=supportFragmentManager.
-//        val fragmentTransaction =
-//            (context as MainActivity).supportFragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id.container, fragment)
-//        fragmentTransaction.addToBackStack(null)
-//
-//
-//        fragmentTransaction.commit()
-//
-//
-//    }
+
 
 
 }

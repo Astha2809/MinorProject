@@ -1,9 +1,12 @@
 package com.example.minorproject
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,20 +15,42 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.ui.setupWithNavController
+import com.example.minorproject.category.ui.CategoryListFragment
 import com.example.minorproject.login.LoginFragment
+import com.example.minorproject.profile.DisplayUserDetailsFragment
 import com.example.minorproject.profile.UserProfileFragment
 import com.example.minorproject.timeline.ui.TimelineFragment
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 class MainActivity : AppCompatActivity() {
+    lateinit var headerView: View
+    lateinit var sp: SharedPreferences
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    var mAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        sp = getSharedPreferences("login", Context.MODE_PRIVATE)
+//        if(sp.getBoolean("logged",false)){
+//            Log.i("sp", sp.toString())
+//            openCategoryFragment()
+//        }
+//        if(mAuth.currentUser!!.equals(true)){
+//            openCategoryFragment()
+//
+//        }
+//        else{
+//            openLoginFragment()
+//        }
+
         if (savedInstanceState == null) {
             openLoginFragment()
         }
@@ -38,6 +63,8 @@ class MainActivity : AppCompatActivity() {
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                    .setAction("Action", null).show()
 //        }
+//
+        //var navigationView:NavigationView
 
         nav_view.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -51,7 +78,20 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_timeline -> {
                     Toast.makeText(applicationContext, "timelineclicked", Toast.LENGTH_SHORT).show()
+
                     Log.i("nav bar", "timelineeclicked")
+
+                    openTImelineFragment()
+
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.nav_displayprofile -> {
+                    Log.i("display", "displayclicked")
+                    openDisplayProfile()
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.textView_useremail_nav_header -> {
+                    Log.i("nav bar", "textviewclicked")
                     openTImelineFragment()
                     return@setNavigationItemSelectedListener true
                 }
@@ -67,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        // val navView: NavigationView = findViewById(R.id.nav_view)
+        val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -77,8 +117,9 @@ class MainActivity : AppCompatActivity() {
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        // navView.setupWithNavController(navController)
+        //navView.setupWithNavController(navController)
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -92,7 +133,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun openLoginFragment() {
+    private fun openLoginFragment() {
+
         val fragment = LoginFragment()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, fragment)
@@ -101,7 +143,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun openProfileFragment() {
+    private fun openProfileFragment() {
         val userProfileFragment = UserProfileFragment()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, userProfileFragment)
@@ -110,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun openTImelineFragment() {
+    private fun openTImelineFragment() {
         val timelineFragment = TimelineFragment()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, timelineFragment)
@@ -118,10 +160,38 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
 
     }
-    fun logoutFunction(){
 
+    private fun openDisplayProfile() {
+        val displayUserDetailsFragment = DisplayUserDetailsFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.container, displayUserDetailsFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
 
     }
 
+    private fun logoutFunction() {
+
+        val currentUser = mAuth.currentUser
+        if (currentUser != null) {
+
+            mAuth.signOut()
+            openLoginFragment()
+
+        }
+    }
+
+    private fun openCategoryFragment() {
+        val categoryListFragment = CategoryListFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.container, categoryListFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
 
 }
+
+
+
+
+

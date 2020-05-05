@@ -2,11 +2,46 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginTop="@dimen/textbox_margintop"
+        android:background="#F8AFA9"
+        android:orientation="vertical">
+
+    <ImageButton
+        android:layout_marginTop="@dimen/textbox_margintop"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
+        android:id="@+id/imageview_profile_fragment"/>
+
+    </LinearLayout>
 
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_text"
+        android:padding="@dimen/textboxes_padding"
+        android:textStyle="bold"
+        android:hint="User Name"
+        android:layout_marginLeft="@dimen/textboxes_sides_margin"
+        android:layout_marginRight="@dimen/textboxes_sides_margin"
+        android:layout_marginTop="@dimen/textbox_margintop"
+        android:id="@+id/edittext_username"/>
+
+    <Button
+        android:id="@+id/savebutton_profilefragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/textbox_margintop"
+        android:text="Save" />
 
 </LinearLayout>

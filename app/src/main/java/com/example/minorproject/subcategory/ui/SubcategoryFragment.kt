@@ -22,11 +22,12 @@ import kotlinx.android.synthetic.main.category_list_fragment.*
 import kotlinx.android.synthetic.main.sub_category_fragment.*
 import java.util.ArrayList
 
-class SubcategoryFragment :Fragment(){
+class SubcategoryFragment : Fragment() {
 
     lateinit var rootview: View
 
-    var categoryId:String?=null
+    var categoryId: String? = null
+    var subcategoryId: String? = null
     var adapter: Adapter? = null
     lateinit var subCategoryViewModel: SubCategoryViewModel
     private lateinit var subCategryList: LiveData<ArrayList<CategoryModel>>
@@ -36,7 +37,7 @@ class SubcategoryFragment :Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootview=inflater.inflate(R.layout.sub_category_fragment,container,false)
+        rootview = inflater.inflate(R.layout.sub_category_fragment, container, false)
         return rootview
 
 
@@ -47,26 +48,29 @@ class SubcategoryFragment :Fragment(){
         initUi()
     }
 
-    private fun initUi(){
-        adapter=context?.let {
+    private fun initUi() {
+        adapter = context?.let {
             Adapter(it)
         }
-        subcategory_recycler.layoutManager=GridLayoutManager(this.context,2)
+        subcategory_recycler.layoutManager = GridLayoutManager(this.context, 2)
         subcategory_recycler.setHasFixedSize(true)
 
 
-        categoryId= arguments?.getString("categoryid")
-        Log.i("subcat id","id"+categoryId)
+        categoryId = arguments?.getString("categoryid")
+        Log.i("subcat id", "id" + categoryId)
 
-     subCategoryViewModel=ViewModelProvider(activity!!).get(SubCategoryViewModel::class.java)
-        subCategryList=subCategoryViewModel.loadSubCategoryToRecycler(categoryId!!)
-        subcategory_recycler.adapter=adapter
+        subcategoryId = arguments?.getString("subcategoryid")
+        Log.i("subcat id2", "id" + subcategoryId)
 
-//      subCategoryViewModel.subCategoryData.observe(viewLifecycleOwner, Observer
-//        { list-> list.let { adapter?.setCategoryData(it) } })
+
+        subCategoryViewModel = ViewModelProvider(activity!!).get(SubCategoryViewModel::class.java)
+        subCategryList =
+            subCategoryViewModel.loadSubCategoryToRecycler(categoryId!!, subcategoryId!!)
+        subcategory_recycler.adapter = adapter
+
 
         subCategoryViewModel.subCategoryData.observe(viewLifecycleOwner, Observer
-        { list->list.let{adapter?.setCategoryData(it)} })
+        { list -> list.let { adapter?.setCategoryData(it) } })
 
         addbutton_add_subcategoy.setOnClickListener(View.OnClickListener {
             openAddSubCategoryFragment()
@@ -75,14 +79,14 @@ class SubcategoryFragment :Fragment(){
 
 
     }
-    private fun openAddSubCategoryFragment(){
 
-        //?why to write activity here?
-        val bundle=Bundle()
-        bundle.putString("categoryid",categoryId)
-        Log.i("subcat id","id"+categoryId)
-        val addSubCategoryFragment= AddSubCategoryFragment()
-        addSubCategoryFragment.arguments=bundle
+    private fun openAddSubCategoryFragment() {
+        arguments?.putString("categoryid", categoryId)
+
+        Log.i("subcat id", "id" + categoryId)
+
+        val addSubCategoryFragment = AddSubCategoryFragment()
+        addSubCategoryFragment.arguments
         val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
         fragmentTransaction.add(R.id.container, addSubCategoryFragment)
         fragmentTransaction.addToBackStack(null)

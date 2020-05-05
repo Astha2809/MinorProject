@@ -9,7 +9,7 @@ import com.example.minorproject.category.viewmodel.CategoryModel
 
 class SubCategoryViewModel :ViewModel(){
     var firebaseRepository=FirebaseRepository()
-    lateinit var subCategoryModel: CategoryModel
+
     var subCategoryData:MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
 
 //    init {
@@ -17,8 +17,8 @@ class SubCategoryViewModel :ViewModel(){
 //    }
 
 
-    fun loadSubCategoryToRecycler(categyid:String): LiveData<ArrayList<CategoryModel>> {
-        subCategoryData=firebaseRepository.loadSubCategoryToRecycler(categyid)
+    fun loadSubCategoryToRecycler(categyid:String,subcategoryid:String): LiveData<ArrayList<CategoryModel>> {
+        subCategoryData=firebaseRepository.loadSubCategoryToRecycler(categyid,subcategoryid)
 
         Log.i("subcategory",subCategoryData.toString())
         return subCategoryData

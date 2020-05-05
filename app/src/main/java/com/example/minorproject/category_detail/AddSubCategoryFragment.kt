@@ -16,8 +16,10 @@ import com.bumptech.glide.Glide
 import com.example.minorproject.R
 import com.example.minorproject.subcategory.ui.SubcategoryFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ServerTimestamp
 import com.google.firebase.storage.FirebaseStorage
@@ -28,9 +30,12 @@ import java.security.Timestamp
 import java.sql.Time
 import java.time.Instant.now
 import java.time.LocalDate.now
+import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import java.time.LocalTime
 import java.time.LocalTime.now
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 import java.util.*
 
@@ -48,12 +53,21 @@ class AddSubCategoryFragment :Fragment() {
     lateinit var rootView: View
     lateinit var newSubCategoryName: String
     var categoryId:String=""
-    @RequiresApi(Build.VERSION_CODES.O)
-    @ServerTimestamp
-    val date=Date()
-    @RequiresApi(Build.VERSION_CODES.O)
-    val time=LocalTime.now()
+    var subcategoryId:String=""
+    lateinit var snack: Snackbar
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    @ServerTimestamp
+//    val date=Date()
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    val time=LocalTime.now()
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    val currentTime=LocalDateTime.now()
+    @RequiresApi(Build.VERSION_CODES.O)
+    val formattedtime=DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+@RequiresApi(Build.VERSION_CODES.O)
+val time=currentTime.format(formattedtime)
+       // DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
     //val timestamp = Timestamp.now()
     //val time=Timestamp.now()
@@ -81,6 +95,11 @@ class AddSubCategoryFragment :Fragment() {
         user = mAuth.getCurrentUser()
         categoryId= arguments?.getString("categoryid").toString()
         Log.i("id add sub ","id"+categoryId)
+
+//        subcategoryId=arguments?.getString("subcategoryid").toString()
+//        Log.i("id add subcat ","id"+subcategoryId)
+
+
 
 
         savebutton_add_details_fragment.setOnClickListener(View.OnClickListener {
@@ -131,7 +150,7 @@ class AddSubCategoryFragment :Fragment() {
                 Log.i("image added from camera", resultCode.toString())
 
                 imageView_add_details_fragment.setImageURI(data.data)
-                    // sendImageToFireStore()
+
 
             }
 
@@ -143,7 +162,7 @@ class AddSubCategoryFragment :Fragment() {
                 Log.i("image added fromgallery", resultCode.toString())
 
                 imageView_add_details_fragment.setImageURI(data.data)
-                   //sendImageToFireStore()
+
 
             }
         }
@@ -154,8 +173,6 @@ class AddSubCategoryFragment :Fragment() {
         uid = mAuth.currentUser?.uid
         if (filepath != null) {
             val imageRef = storageRef.child("images/" + UUID.randomUUID().toString())
-//            val imageRef = storageRef.child("images/")
-//                .child(" "+ ".jpeg")
             imageRef.putFile(filepath!!)
                 .addOnSuccessListener {
                     Log.i("on success", "uploaded")
@@ -176,7 +193,7 @@ class AddSubCategoryFragment :Fragment() {
                 url = it.toString()
                 Log.i("17/april/2020 image url", url)
                     sendUrlToSubCategoryCollection()
-                     sendDataToTimeline()
+                    // sendDataToTimeline()
 
                 if (url != null) {
                     Log.i("if mei aaye", "if mei aye")
@@ -192,27 +209,40 @@ class AddSubCategoryFragment :Fragment() {
     }
 
     private fun sendUrlToSubCategoryCollection() {
-        val imageDetails = hashMapOf(imageKey to url, titleKey to newSubCategoryName, "imageid" to categoryId)
-        db.collection("Subcategory").document(categoryId).collection("SubcategoryImages").document()
+        val imageDetails =
+            hashMapOf(imageKey to url, titleKey to newSubCategoryName, "imageid" to categoryId)
+        db.collection("Subcategory").document(categoryId).collection("SubcategoryImages")
             // .document(mAuth.currentUser!!.uid)
-            .set(imageDetails as Map<*, *>)
-            .addOnCompleteListener {
-                //openCategoryListFragment()
-                //openSubCategoryFragment()
+            .add(imageDetails as Map<*, *>)
+            .addOnSuccessListener {DocumentReference ->
+                val id1 = DocumentReference.id
+            sendDataToTimeline(id1)
 
-                Log.i("data added", "DocumentSnapshot added with ID")
+        Log.i("data added", "DocumentSnapshot added with ID")
+                snack= Snackbar.make(layout_add_details_fragment,"Uploaded",Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS",View.OnClickListener {
+                    System.out.println("snack clicked")
+                })
+                snack.show()
+
             }
             .addOnFailureListener {
                 Log.i("data not added", "Error adding document")
+                snack= Snackbar.make(layout_add_details_fragment,"Failed",Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS",View.OnClickListener {
+                    System.out.println("snack clicked")
+                })
+                snack.show()
+
             }
 
 
     }
 
-    private fun sendDataToTimeline(){
-        val timelineDetails= hashMapOf(imageKey to url,titleKey to newSubCategoryName, "Date" to date,"Time" to time)
-        db.collection("Timeline")
-            .add(timelineDetails as Map<*,*>)
+    private fun sendDataToTimeline(ab:String){
+        val timelineDetails= hashMapOf(imageKey to url,titleKey to newSubCategoryName, "timestamp" to time)
+        db.collection("Timeline").document(ab)
+            .set(timelineDetails as Map<*,*>)
             .addOnCompleteListener {
                 Log.i("timeline data added", "DocumentSnapshot added with ID")
             }

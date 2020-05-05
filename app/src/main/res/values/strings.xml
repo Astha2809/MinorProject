@@ -14,4 +14,5 @@
     <string name="home_second">Home Second</string>
     <string name="enter_email">Enter Email</string>
     <string name="enter_password">enter password</string>
+    <string name="buttontext_login_next">Next</string>
 </resources>
