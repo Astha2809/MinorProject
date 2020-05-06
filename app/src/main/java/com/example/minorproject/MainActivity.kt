@@ -38,18 +38,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        sp = getSharedPreferences("login", Context.MODE_PRIVATE)
-//        if(sp.getBoolean("logged",false)){
-//            Log.i("sp", sp.toString())
-//            openCategoryFragment()
-//        }
-//        if(mAuth.currentUser!!.equals(true)){
-//            openCategoryFragment()
-//
-//        }
-//        else{
-//            openLoginFragment()
-//        }
+
+
 
         if (savedInstanceState == null) {
             openLoginFragment()
@@ -138,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         val fragment = LoginFragment()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, fragment)
-        fragmentTransaction.addToBackStack(null)
+        //fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
 
     }

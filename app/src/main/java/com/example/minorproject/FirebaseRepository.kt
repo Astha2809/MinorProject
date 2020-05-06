@@ -1,18 +1,45 @@
 package com.example.minorproject
 
 import android.util.Log
+import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.minorproject.category.viewmodel.CategoryModel
+import com.example.minorproject.login.ViewModel.LoginModel
 import com.example.minorproject.timeline.ViewModel.TimelineModel
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import kotlinx.android.synthetic.main.loginfragment.*
 import java.util.ArrayList
 
 class FirebaseRepository {
     var database = FirebaseFirestore.getInstance()
+   var  mAuth = FirebaseAuth.getInstance()
     var categoryLiveData: MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
     var subCategoryLiveData: MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
     var timelineLiveData: MutableLiveData<ArrayList<TimelineModel>> = MutableLiveData()
    // var userLiveData: MutableLiveData<List<ProfileModel>> = MutableLiveData()
+
+    /*fun signUp(email:String,password:String): MutableLiveData<LoginModel>{
+        var result:MutableLiveData<Result<Boolean>> = MutableLiveData()
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener { task ->
+
+            if (task.isSuccessful) {
+               result.value=Result.success(true)
+                Log.i("signup hogya", "signup successfully")
+            } else {
+
+                result.value= Result.failure()
+                Log.i("nhi hua signup", "not signup")
+                Log.e("error",task.exception?.message)
+                // moveToNextScreen()
+            }
+        }
+
+
+
+    }*/
 
 
     fun loadCategoryToRecycler(): MutableLiveData<ArrayList<CategoryModel>> {
@@ -56,9 +83,7 @@ class FirebaseRepository {
     ): MutableLiveData<ArrayList<CategoryModel>> {
 
         var arrayList: ArrayList<CategoryModel> = ArrayList()
-        // var aa=subCategoryModel.categoryId
-//        var aa =addSubCategoryFragment.categoryId
-//        Log.i("aa ki value","id"+aa)
+
 
         database.collection("Subcategory").document(categoryid).collection("SubcategoryImages")
             .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
@@ -133,6 +158,9 @@ class FirebaseRepository {
             })
         return timelineLiveData
     }
+
+
+
 
     /*fun loadUserData(): MutableLiveData<List<ProfileModel>> {
         var arrayList: ArrayList<ProfileModel> = ArrayList()

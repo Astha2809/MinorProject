@@ -146,7 +146,7 @@ class LoginFragment : Fragment() {
                 val aa: Int? = task.getResult()?.signInMethods?.size
 
                 if (aa == 0) {
-                    //toas
+
                     isNewUser = true
                     Log.i("New user hai", "new user")
 
@@ -191,11 +191,9 @@ class LoginFragment : Fragment() {
                 snack.show()
                 Log.i("loged in", "loged in again")
                 Log.i("password",password)
-               // Log.i("login error",task.exception?.message)
+
                 moveToNextScreen()
-               // val aa: Int? = task.getResult()?.signInMethods?.size
-                //sp.edit().putBoolean("logged",true).apply()
-                //Log.i("sp", sp.toString())
+
             }
 
             else {
@@ -253,10 +251,9 @@ class LoginFragment : Fragment() {
     private fun addDataTOFirestore(){
         val user= hashMapOf("email" to email)
             database.collection("userdetails")
-                //.add(user as Map<String, Any>)
+
                 .document(mAuth.currentUser!!.uid).set(user as Map<String,Any>, SetOptions.merge())
-              // database.collection("users").document(mAuth.currentUser!!.uid) .collection("categorynameimages")
-        //db.collection("User").document(mAuth.currentUser!!.uid).set(user as Map<String, Any>)
+
             .addOnCompleteListener { documentReference->
                 Log.i("data added", "DocumentSnapshot added with ID")
 
@@ -277,17 +274,16 @@ class LoginFragment : Fragment() {
 
 private fun moveToNextScreen(){
     val fragment= CategoryListFragment()
-    //val fragmentTransaction=supportFragmentManager.
-    val fragmentTransaction=activity!!.supportFragmentManager.beginTransaction()
-    fragmentTransaction.replace(R.id.container,fragment)
-    fragmentTransaction.addToBackStack(null)
-    fragmentTransaction.commit()
+
+    val fragmentTransaction= activity?.supportFragmentManager?.beginTransaction()
+    if (fragmentTransaction != null) {
+        fragmentTransaction.replace(R.id.container,fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
 
 }
 }
-//val fragment=LoginFragment()
-//val fragmentTransaction=supportFragmentManager.beginTransaction()
-//fragmentTransaction.replace(R.id.container,fragment)
-//fragmentTransaction.addToBackStack(null)
-//fragmentTransaction.commit()
+
 

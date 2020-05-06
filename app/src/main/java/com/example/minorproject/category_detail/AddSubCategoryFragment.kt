@@ -55,11 +55,7 @@ class AddSubCategoryFragment :Fragment() {
     var categoryId:String=""
     var subcategoryId:String=""
     lateinit var snack: Snackbar
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    @ServerTimestamp
-//    val date=Date()
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    val time=LocalTime.now()
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     val currentTime=LocalDateTime.now()
@@ -67,9 +63,9 @@ class AddSubCategoryFragment :Fragment() {
     val formattedtime=DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 @RequiresApi(Build.VERSION_CODES.O)
 val time=currentTime.format(formattedtime)
-       // DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
-    //val timestamp = Timestamp.now()
+
+
     //val time=Timestamp.now()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -119,7 +115,7 @@ val time=currentTime.format(formattedtime)
         val builder = MaterialAlertDialogBuilder(context)
         with(builder) {
             setItems(options) { dialog, which ->
-                if (options[which].equals("TakePhoto")) {
+                if (options[which].equals("Take Photo")) {
                     dialog.dismiss()
                     val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     startActivityForResult(takePictureIntent, 9347)
@@ -146,7 +142,7 @@ val time=currentTime.format(formattedtime)
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             9347 -> if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-                filepath = data.getData()
+                 filepath = data.getData()
                 Log.i("image added from camera", resultCode.toString())
 
                 imageView_add_details_fragment.setImageURI(data.data)
@@ -212,7 +208,7 @@ val time=currentTime.format(formattedtime)
         val imageDetails =
             hashMapOf(imageKey to url, titleKey to newSubCategoryName, "imageid" to categoryId)
         db.collection("Subcategory").document(categoryId).collection("SubcategoryImages")
-            // .document(mAuth.currentUser!!.uid)
+
             .add(imageDetails as Map<*, *>)
             .addOnSuccessListener {DocumentReference ->
                 val id1 = DocumentReference.id

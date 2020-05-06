@@ -117,18 +117,20 @@ class AddCategoryFragment : Fragment() {
         val builder = MaterialAlertDialogBuilder(context)
         with(builder) {
             setItems(options) { dialog, which ->
-                if (options[which].equals("TakePhoto")) {
+                if (options[which] == "Take Photo") {
                     dialog.dismiss()
-                    val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    val takePictureIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
                     startActivityForResult(takePictureIntent, 9347)
-                } else if (options[which].equals("Choose From Gallery")) {
+                    Log.i("REquest code", targetRequestCode.toString())
+
+                } else if (options[which] == "Choose From Gallery") {
                     dialog.dismiss()
                     val takeImageFromGallery = Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                    )
+                        Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                     startActivityForResult(takeImageFromGallery, 8516)
-                } else if (options[which].equals("Cancel")) {
+                    Log.i("REquest code", targetRequestCode.toString())
+                }
+                else if (options[which] == "Cancel") {
                     dialog.dismiss()
                 }
             }
@@ -144,9 +146,11 @@ class AddCategoryFragment : Fragment() {
 
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            9347 -> if (resultCode == RESULT_OK && data != null && data.data != null) {
+            9347 -> if (resultCode == RESULT_OK && data != null) {
+                Log.i("INtent ki value", data.toString())
                 filepath = data.getData()
                 Log.i("image added from camera", resultCode.toString())
+
 
                 imageView_add_details_fragment.setImageURI(data.data)
 
@@ -159,6 +163,7 @@ class AddCategoryFragment : Fragment() {
                 filepath = data.getData()
 
                 Log.i("image added fromgallery", resultCode.toString())
+
 
                 imageView_add_details_fragment.setImageURI(data.data)
 
@@ -218,7 +223,7 @@ class AddCategoryFragment : Fragment() {
     private fun sendUrlToCategoryCollection() {
         val imageDetails = hashMapOf(imageKey to url, titleKey to newCategoryName,"imageid" to uid)
         db.collection("categorynameimages")
-           // .document(mAuth.currentUser!!.uid)
+
             .add(imageDetails as Map<*, *>)
             .addOnCompleteListener {
                 //openCategoryListFragment()
@@ -244,16 +249,16 @@ class AddCategoryFragment : Fragment() {
 
 
 
-    private fun openCategoryListFragment(){
-        val fragment= CategoryListFragment()
-        val fragmentTransaction= activity?.supportFragmentManager?.beginTransaction()
-        if (fragmentTransaction != null) {
-            fragmentTransaction.replace(R.id.container,fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-        }
-
-    }
+//    private fun openCategoryListFragment(){
+//        val fragment= CategoryListFragment()
+//        val fragmentTransaction= activity?.supportFragmentManager?.beginTransaction()
+//        if (fragmentTransaction != null) {
+//            fragmentTransaction.replace(R.id.container,fragment)
+//            fragmentTransaction.addToBackStack(null)
+//            fragmentTransaction.commit()
+//        }
+//
+//    }
 
 }
 

@@ -87,10 +87,13 @@ class SubcategoryFragment : Fragment() {
 
         val addSubCategoryFragment = AddSubCategoryFragment()
         addSubCategoryFragment.arguments
-        val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.container, addSubCategoryFragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        if (fragmentTransaction != null) {
+            fragmentTransaction.add(R.id.container, addSubCategoryFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+
     }
 
 }

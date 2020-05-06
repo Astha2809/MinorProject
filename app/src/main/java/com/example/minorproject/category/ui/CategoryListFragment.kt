@@ -125,10 +125,13 @@ class CategoryListFragment : Fragment() {
     fun openAddDetailsFragment() {
         val addDetailsFragment = AddCategoryFragment()
         //?why to write activity here?
-        val fragmentTransaction = activity!!.supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.container, addDetailsFragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        if (fragmentTransaction != null) {
+            fragmentTransaction.add(R.id.container, addDetailsFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+
 
 
     }
