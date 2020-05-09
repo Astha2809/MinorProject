@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.minorproject.category.viewmodel.CategoryModel
 import com.example.minorproject.MainActivity
 import com.example.minorproject.R
+import com.example.minorproject.category.ui.CategoryListFragment
 import com.example.minorproject.subcategory.ui.DisplaySubCategoryFragment
 import com.example.minorproject.subcategory.ui.SubcategoryFragment
 
@@ -47,6 +48,7 @@ class Adapter(var context: Context) :
 //
         holder.categoryImageImageView.setOnClickListener(View.OnClickListener {
             //  clearData()
+           // val categoryListFragment=CategoryListFragment()
             val subcategoryfragment = SubcategoryFragment()
 
 
@@ -61,6 +63,7 @@ class Adapter(var context: Context) :
             val fragmentTransaction =
                 (context as MainActivity).supportFragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.container, subcategoryfragment)
+          //  fragmentTransaction.add(R.id.container2,categoryListFragment)
             fragmentTransaction.addToBackStack(null)
 
 
@@ -77,6 +80,7 @@ class Adapter(var context: Context) :
             val fragmentTransaction =
                 (context as MainActivity).supportFragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.container, displaySubCategoryFragment)
+
             fragmentTransaction.addToBackStack(null)
 
 

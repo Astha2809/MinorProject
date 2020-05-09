@@ -3,10 +3,10 @@ package com.example.minorproject.timeline.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.minorproject.FirebaseRepository
+import com.example.minorproject.common.FirebaseRepository
 
 class TimelineViewModel:ViewModel(){
-    var firebaseRepository=FirebaseRepository()
+    var firebaseRepository= FirebaseRepository()
     var timelineData:MutableLiveData<ArrayList<TimelineModel>> = MutableLiveData()
 
 init {

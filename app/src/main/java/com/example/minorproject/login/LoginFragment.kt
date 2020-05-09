@@ -2,51 +2,47 @@ package com.example.minorproject.login
 
 //import com.google.firebase.auth.ProviderQueryResult
 import android.app.ActionBar
-import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import androidx.annotation.RequiresApi
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.minorproject.MainActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.minorproject.R
 import com.example.minorproject.category.ui.CategoryListFragment
+import com.example.minorproject.login.ViewModel.LoginViewModel
+import com.example.minorproject.repo.SignInRepo
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.loginfragment.*
 
-const val emailScreen: Int = 0
-const val passwordScreen: Int = 1
+const val EMAIL_SCREEN: Int = 0
+const val PASSWORD_SCREEN: Int = 1
 //const val imageScreen: Int = 2
 
 
 class LoginFragment : Fragment() {
-    // lateinit var editTextEmail: EditText
-    lateinit var editTextPassword: EditText
-    lateinit var buttonNext: Button
-    lateinit var snack:Snackbar
+
+
+    lateinit var snack: Snackbar
     lateinit var rootView: View
     lateinit var mAuth: FirebaseAuth
     var isNewUser: Boolean = false
-    lateinit var email: String
-    lateinit var password: String
-    var currentScreen = emailScreen
-  //  lateinit var sp:SharedPreferences
-   lateinit var database:FirebaseFirestore
+     var email: String=""
+     var password: String=""
+    var signInRepo = SignInRepo()
+    //var currentScreen = emailScreen
 
-   // val editTextEmail by lazy { view!!.findViewById<EditText>(R.id.edittext_email) }
-
-    // private var mAuth: FirebaseAuth? = null
-
+    lateinit var database: FirebaseFirestore
+    private val mViewModel by lazy {
+        ViewModelProvider(this).get(LoginViewModel::class.java)
+    }
 
 
     override fun onCreateView(
@@ -57,14 +53,17 @@ class LoginFragment : Fragment() {
     ): View? {
 
         rootView = inflater.inflate(R.layout.loginfragment, container, false)
-           //hidenav()
-//        val actionBar: ActionBar? =activity?.actionBar
+        //hidenav()
+      val actionBar: ActionBar? =activity?.actionBar
 //        actionBar?.hide()
         //(requireActivity() as MainActivity).supportActionBar!!.hide()
 
         return rootView
 
     }
+
+
+
 
     private fun initUi() {
 
@@ -74,22 +73,52 @@ class LoginFragment : Fragment() {
 
 
         mAuth = FirebaseAuth.getInstance()
-       // sp=getSharedPreferences("login", Context.MODE_PRIVATE)
 
-        database= FirebaseFirestore.getInstance()
+
+        database = FirebaseFirestore.getInstance()
 
 
         next.setOnClickListener(View.OnClickListener {
-            if (currentScreen == emailScreen) {
-                Check()
-            } else if (currentScreen == passwordScreen) {
-                if (isNewUser) {
-                    Log.i("email ki vaue",email)
-                    signUp()
-                    ////todo goto usernamescreen
+            //setObservers()
+
+            if (mViewModel.currentScreenVal == EMAIL_SCREEN) {
+                 email=edittext_email.text.toString()
+                mViewModel.check(email)
+
+            } else if (mViewModel.currentScreenVal == PASSWORD_SCREEN) {
+                password = edittext_email.text.toString().trim()
+                if (mViewModel.isNewUser) {
+                    Log.i("email ki vaue", email)
+                    Log.i("password ki value", password)
+                    //signUp()
+
+                    view?.let { it1 -> mViewModel.signUp(email, password, it1) }
+                    //dataaddkamethodcall
+//                    signInRepo.onSuccess.observe(viewLifecycleOwner, Observer {
+//
+//                        Log.i("it ki vaue", it.toString())
+//                        if (it == true){
+//                            moveToNextScreen()
+//                        }
+//
+//                    })
+                        //moveToNextScreen()
+
+
                     //forsignup
                 } else {
-                    signIn()
+                    //signIn()
+                    view?.let { it1 -> mViewModel.login(email, password, it1) }
+//                    signInRepo.onSuccess.observe(viewLifecycleOwner, Observer {
+//                        Log.i("it", it.toString())
+//                        if (it == true){
+//                            moveToNextScreen()
+//                        }
+//
+//
+//                    })
+
+                   // moveToNextScreen()
 
                 }
             }
@@ -98,27 +127,42 @@ class LoginFragment : Fragment() {
         })
 
 
+
+    }
+    private fun setObservers() {
+        mViewModel.getErrMessage().observe(viewLifecycleOwner, Observer {
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
+            //showToast(it)
+        })
+        mViewModel.currentScreen.observe(viewLifecycleOwner,Observer{
+            setScreen(it)
+
+        })
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         initUi()
+        setObservers()
+
 
 
     }
 
-    fun hidenav(){
+    //fun abc(){
+//   mViewModel.signUp(email,password)
+//}
+    fun hidenav() {
         activity?.window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        // Set the content to appear under the system bars so that the
-        // content doesn't resize when the system bars hide and show.
-        or  View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-       // or  View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        // Hide the nav bar and status bar
-        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        or View.SYSTEM_UI_FLAG_FULLSCREEN)
-
-
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                // or  View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
 
 
     }
@@ -132,9 +176,9 @@ class LoginFragment : Fragment() {
     private fun Check() {
 //        edittext_email.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 //        edittext_email.setHint(R.string.enter_password)
-
-
+           //setObservers()
         email = edittext_email.text.toString()
+
 
 
         mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(OnCompleteListener { task ->
@@ -143,6 +187,7 @@ class LoginFragment : Fragment() {
             if (task.isSuccessful) {
                 //it returns 1 if emailid exists
                 //0 if does not exists
+
                 val aa: Int? = task.getResult()?.signInMethods?.size
 
                 if (aa == 0) {
@@ -155,19 +200,19 @@ class LoginFragment : Fragment() {
                     Log.i("new user nhi hai", "not a new user")
                 }
                 Log.i("aa ki value", aa.toString())
-                setScreen()
+               // setScreen(it)
 
                 //Signup()
 
 
             } else {
                 //signup failed due to some aapi error
-                snack= Snackbar.make(linear_loginfragment,"cant signup",Snackbar.LENGTH_LONG)
-                snack.setAction("DISMISS",View.OnClickListener {
+                snack = Snackbar.make(linear_loginfragment, "cant signup", Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS", View.OnClickListener {
                     System.out.println("snack clicked")
                 })
                 snack.show()
-                Log.i("signup fail hogya","signup failed")
+                Log.i("signup fail hogya", "signup failed")
 
 
             }
@@ -178,7 +223,7 @@ class LoginFragment : Fragment() {
 
     }
 
-    private fun signIn() {
+    /*private fun signIn() {
 //        email = edittext_email.text.toString()
         password = edittext_email.text.toString().trim()
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
@@ -212,78 +257,81 @@ class LoginFragment : Fragment() {
             }
         }
 
-    }
+    }*/
 
-    private fun signUp() {
-       // email = edittext_email.text.toString().trim()
-
-
-        password = edittext_email.text.toString().trim()
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                snack= Snackbar.make(linear_loginfragment,"signup",Snackbar.LENGTH_LONG)
-                snack.setAction("DISMISS",View.OnClickListener {
-                    System.out.println("snack clicked")
-                })
-                snack.show()
-                addDataTOFirestore()
-                moveToNextScreen()
-                Log.i("signup hogya", "signup successfully")
-            } else {
-                snack= Snackbar.make(linear_loginfragment,"cant signup",Snackbar.LENGTH_LONG)
-                snack.setAction("DISMISS",View.OnClickListener {
-                    System.out.println("snack clicked")
-                })
-                snack.show()
-
-                Log.i("nhi hua signup", "not signup")
-                Log.e("error",task.exception?.message)
-               // moveToNextScreen()
-            }
-
-        }
+    /* private fun signUp() {
+        // email = edittext_email.text.toString().trim()
 
 
+         password = edittext_email.text.toString().trim()
+         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+             if (task.isSuccessful) {
+                 snack= Snackbar.make(linear_loginfragment,"signup",Snackbar.LENGTH_LONG)
+                 snack.setAction("DISMISS",View.OnClickListener {
+                     System.out.println("snack clicked")
+                 })
+                 snack.show()
+                 addDataTOFirestore()
+                 moveToNextScreen()
+                 Log.i("signup hogya", "signup successfully")
+             } else {
+                 snack= Snackbar.make(linear_loginfragment,"cant signup",Snackbar.LENGTH_LONG)
+                 snack.setAction("DISMISS",View.OnClickListener {
+                     System.out.println("snack clicked")
+                 })
+                 snack.show()
+
+                 Log.i("nhi hua signup", "not signup")
+                 Log.e("error",task.exception?.message)
+                // moveToNextScreen()
+             }
+
+         }
 
 
 
-    }
-    private fun addDataTOFirestore(){
-        val user= hashMapOf("email" to email)
-            database.collection("userdetails")
 
-                .document(mAuth.currentUser!!.uid).set(user as Map<String,Any>, SetOptions.merge())
 
-            .addOnCompleteListener { documentReference->
-                Log.i("data added", "DocumentSnapshot added with ID")
+     }*/
 
-            }
-            .addOnFailureListener { documentRefrence->
-                Log.i("data not added", "Error adding document")
-            }
-    }
+    /* private fun addDataTOFirestore(){
+         val user= hashMapOf("email" to email)
+             database.collection("userdetails")
 
-    private fun setScreen() {
-        if (currentScreen == emailScreen) {
-            currentScreen = passwordScreen
-            edittext_email.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+                 .document(mAuth.currentUser!!.uid).set(user as Map<String,Any>, SetOptions.merge())
+
+             .addOnCompleteListener { documentReference->
+                 Log.i("data added", "DocumentSnapshot added with ID")
+
+             }
+             .addOnFailureListener { documentRefrence->
+                 Log.i("data not added", "Error adding document")
+             }
+     }*/
+
+    private fun setScreen(it: Int) {
+
+           if(it== PASSWORD_SCREEN) {
+               edittext_email.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
             edittext_email.setHint(R.string.enter_password)
+
             edittext_email.text.clear()
+            //password = edittext_email.text.toString().trim()
         }
     }
 
-private fun moveToNextScreen(){
-    val fragment= CategoryListFragment()
+    private fun moveToNextScreen() {
+        val fragment = CategoryListFragment()
 
-    val fragmentTransaction= activity?.supportFragmentManager?.beginTransaction()
-    if (fragmentTransaction != null) {
-        fragmentTransaction.replace(R.id.container,fragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        if (fragmentTransaction != null) {
+            fragmentTransaction.replace(R.id.container, fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+
+
     }
-
-
-}
 }
 
 

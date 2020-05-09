@@ -3,9 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
+
     android:id="@+id/catogary_content_list"
     android:padding="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#947898"
+        android:padding="10dp">
+
+
 
     <ImageView
         android:id="@+id/image_categorylist"
@@ -27,9 +42,13 @@
         android:layout_below="@id/image_categorylist"
         android:layout_marginLeft="8dp"
         android:textStyle="bold"
-        android:background="#DDD056"
+        android:background="#F7F3960C"
         android:padding="@dimen/textboxes_padding"
         tools:text="TextView" />
-
+    </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>
+
+
+
 

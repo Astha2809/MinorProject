@@ -4,9 +4,37 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/side_nav_bar"
     android:id="@+id/linear_loginfragment"
     >
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:src="@drawable/galleryicon1"
+        android:layout_marginTop="@dimen/textbox_margintop"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="My Gallery"
+        android:textStyle="italic"
+        android:textSize="20dp"
+        android:textColor="#ffffff"
+
+
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/rounded_layout"
+
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="@dimen/textboxes_padding"
+        android:layout_marginRight="@dimen/textboxes_padding"
+        android:orientation="vertical">
+
 
     <EditText
         android:layout_width="match_parent"
@@ -16,9 +44,11 @@
         android:textStyle="bold"
         android:padding="@dimen/textboxes_padding"
         android:id="@+id/edittext_email"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center"
         android:background="@drawable/rounded_text"
-        android:layout_marginTop="@dimen/login_edittext_margintop"
+
+
         android:hint="@string/enter_email"
         />
 
@@ -30,5 +60,6 @@
         android:layout_marginTop="@dimen/textbox_margintop"
         android:layout_gravity="center"
         android:text="@string/buttontext_login_next"/>
+</LinearLayout>
 
 </LinearLayout>

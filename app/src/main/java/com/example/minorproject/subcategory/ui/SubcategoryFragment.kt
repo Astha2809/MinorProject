@@ -81,12 +81,15 @@ class SubcategoryFragment : Fragment() {
     }
 
     private fun openAddSubCategoryFragment() {
-        arguments?.putString("categoryid", categoryId)
+
+        //arguments?.putString("categoryid", categoryId)
 
         Log.i("subcat id", "id" + categoryId)
 
         val addSubCategoryFragment = AddSubCategoryFragment()
-        addSubCategoryFragment.arguments
+        var bundle=Bundle()
+        bundle.putString("categoryid", categoryId)
+        addSubCategoryFragment.arguments=bundle
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
         if (fragmentTransaction != null) {
             fragmentTransaction.add(R.id.container, addSubCategoryFragment)

@@ -1,45 +1,26 @@
-package com.example.minorproject
+package com.example.minorproject.common
 
 import android.util.Log
-import android.view.View
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.minorproject.category.viewmodel.CategoryModel
 import com.example.minorproject.login.ViewModel.LoginModel
 import com.example.minorproject.timeline.ViewModel.TimelineModel
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import kotlinx.android.synthetic.main.loginfragment.*
 import java.util.ArrayList
 
 class FirebaseRepository {
     var database = FirebaseFirestore.getInstance()
-   var  mAuth = FirebaseAuth.getInstance()
+    var mAuth = FirebaseAuth.getInstance()
     var categoryLiveData: MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
     var subCategoryLiveData: MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
     var timelineLiveData: MutableLiveData<ArrayList<TimelineModel>> = MutableLiveData()
-   // var userLiveData: MutableLiveData<List<ProfileModel>> = MutableLiveData()
+    var userLiveData: MutableLiveData<LoginModel> = MutableLiveData()
 
-    /*fun signUp(email:String,password:String): MutableLiveData<LoginModel>{
-        var result:MutableLiveData<Result<Boolean>> = MutableLiveData()
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener { task ->
-
-            if (task.isSuccessful) {
-               result.value=Result.success(true)
-                Log.i("signup hogya", "signup successfully")
-            } else {
-
-                result.value= Result.failure()
-                Log.i("nhi hua signup", "not signup")
-                Log.e("error",task.exception?.message)
-                // moveToNextScreen()
-            }
-        }
-
-
-
-    }*/
+    // var items = LoginModel()
+    var userEmail: String? = null
+    var userName: String? = null
+    var userImage: String? = null
 
 
     fun loadCategoryToRecycler(): MutableLiveData<ArrayList<CategoryModel>> {
@@ -159,44 +140,60 @@ class FirebaseRepository {
         return timelineLiveData
     }
 
+    /* fun loadUserData(): MutableLiveData<LoginModel> {
+         database.collection("userdetails").document(mAuth.currentUser!!.uid).get()
+             .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
+                 if (e != null) {
+                     Log.i("listen failed", "Listen failed.", e)
+                     userLiveData.value = null
+                     return@EventListener
+                 }
+                 if (value != null) {
+                     for (document: QueryDocumentSnapshot in value) {
+                         userEmail = document.data.get("email").toString()
+                         userName = document.data.get("username").toString()
+                         userImage = document.data.get("profile picture").toString()
+                         Log.i("useremail", userEmail)
+                         Log.i("username", userName)
+                         Log.i("userimage", userImage)
+                         items =
+                             LoginModel(
+                                 userEmail,
+                                 userName,
+                                 userImage
+                             )
 
+                         Log.i("DATA ADDED", items.toString())
+                         //}
 
+                     }
+                     userLiveData.value = items
+                 }
 
-    /*fun loadUserData(): MutableLiveData<List<ProfileModel>> {
-        var arrayList: ArrayList<ProfileModel> = ArrayList()
-        database.collection("userdetails")
-            .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
-                if (e != null) {
-                    Log.i("listen failed", "Listen failed.", e)
-                    userLiveData.value = null
-                    return@EventListener
-                }
-                if (value != null) {
-                    for (document: QueryDocumentSnapshot in value) {
-                        var userName = document.data.get("username").toString()
-                        var userImage = document.data.get("profile picture").toString()
-                        var userEmail = document.data.get("email").toString()
-                        Log.i("username", userName)
-                        Log.i("userimage", userImage)
-                        Log.i("useremail", userEmail)
+             })
 
-                        val items = arrayList.add(
-                            ProfileModel(
-                                userName,
-                                userImage, userEmail
-                            )
-                        )
-                        Log.i("DATA ADDED", items.toString())
-                    }
-                }
-                userLiveData.value = arrayList
+         return userLiveData
+     }*/
 
-            })
+    fun loadUserData(): MutableLiveData<LoginModel> {
+        val documentReference: DocumentReference =
+            database.collection("userdetails").document(mAuth.currentUser!!.uid)
+        documentReference.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+            if (documentSnapshot != null) {
+                userEmail = documentSnapshot.data?.get("email").toString()
+                userName = documentSnapshot.data?.get("username").toString()
+                userImage = documentSnapshot.data?.get("profile picture").toString()
+                val item1 = LoginModel(userEmail, userName, userImage)
+                userLiveData.value = item1
+            }
+        }
         return userLiveData
 
+    }
 
-    }*/
+
 }
+
 
 
 

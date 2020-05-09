@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.minorproject.FirebaseRepository
+import com.example.minorproject.common.FirebaseRepository
 import com.example.minorproject.category.viewmodel.CategoryModel
 
 class SubCategoryViewModel :ViewModel(){
-    var firebaseRepository=FirebaseRepository()
+    var firebaseRepository= FirebaseRepository()
 
     var subCategoryData:MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
 

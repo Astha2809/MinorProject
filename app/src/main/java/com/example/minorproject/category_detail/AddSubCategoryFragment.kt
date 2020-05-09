@@ -52,7 +52,7 @@ class AddSubCategoryFragment :Fragment() {
     var imageKey: String = "subcategoryurl"
     lateinit var rootView: View
     lateinit var newSubCategoryName: String
-    var categoryId:String=""
+    var categoryId:String?=null
     var subcategoryId:String=""
     lateinit var snack: Snackbar
 
@@ -89,7 +89,8 @@ val time=currentTime.format(formattedtime)
         storage = FirebaseStorage.getInstance()
         storageRef = storage.reference
         user = mAuth.getCurrentUser()
-        categoryId= arguments?.getString("categoryid").toString()
+        categoryId= arguments?.getString("categoryid")
+
         Log.i("id add sub ","id"+categoryId)
 
 //        subcategoryId=arguments?.getString("subcategoryid").toString()
@@ -207,7 +208,7 @@ val time=currentTime.format(formattedtime)
     private fun sendUrlToSubCategoryCollection() {
         val imageDetails =
             hashMapOf(imageKey to url, titleKey to newSubCategoryName, "imageid" to categoryId)
-        db.collection("Subcategory").document(categoryId).collection("SubcategoryImages")
+        db.collection("Subcategory").document(categoryId!!).collection("SubcategoryImages")
 
             .add(imageDetails as Map<*, *>)
             .addOnSuccessListener {DocumentReference ->

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_marginTop="@dimen/textbox_margintop"
-        android:background="#F8AFA9"
+        android:background="#947898"
         android:orientation="vertical">
 
     <ImageButton
@@ -42,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/textbox_margintop"
+        android:layout_gravity="center"
         android:text="Save" />
 
 </LinearLayout>

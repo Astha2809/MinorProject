@@ -1,11 +1,8 @@
 package com.example.minorproject.profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.minorproject.FirebaseRepository
 
-//class ProfileViewModel:ViewModel(){
+class ProfileViewModel: ViewModel(){
 //    var firebaseRepository= FirebaseRepository()
 //    var userData: MutableLiveData<List<ProfileModel>> = MutableLiveData()
 //
@@ -18,4 +15,5 @@ import com.example.minorproject.FirebaseRepository
 //        return userData
 //    }
 //
-//}
+
+}
