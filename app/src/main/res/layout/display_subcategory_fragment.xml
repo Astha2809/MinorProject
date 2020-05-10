@@ -9,11 +9,11 @@
 
     <ImageView
         android:id="@+id/imageview_display_subcategory"
-        android:layout_width="304dp"
-        android:layout_height="504dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="80dp"
+        android:layout_width="@dimen/imageview_width_display_subcategory"
+        android:layout_height="@dimen/imageview_height_display_subcategory"
+        android:layout_marginStart="@dimen/imageview_margins_display_subcategory"
+        android:layout_marginLeft="@dimen/imageview_margins_display_subcategory"
+        android:layout_marginTop="@dimen/imageview_margins_display_subcategory"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

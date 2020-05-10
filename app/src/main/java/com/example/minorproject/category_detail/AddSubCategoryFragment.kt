@@ -39,34 +39,35 @@ import java.time.format.FormatStyle
 
 import java.util.*
 
-class AddSubCategoryFragment :Fragment() {
+class AddSubCategoryFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     lateinit var db: FirebaseFirestore
     lateinit var storageRef: StorageReference
     lateinit var mAuth: FirebaseAuth
     private var user: FirebaseUser? = null
     private var filepath: Uri? = null
-    var url: String?=null
+    var url: String? = null
     var uid: String? = null
     var titleKey: String = "subcategorytitle"
     var imageKey: String = "subcategoryurl"
+    var timestamp: String = "timestamp"
     lateinit var rootView: View
     lateinit var newSubCategoryName: String
-    var categoryId:String?=null
-    var subcategoryId:String=""
+    var categoryId: String? = null
+    var subcategoryId: String = ""
     lateinit var snack: Snackbar
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    val currentTime=LocalDateTime.now()
+    val currentTime = LocalDateTime.now()
+
     @RequiresApi(Build.VERSION_CODES.O)
-    val formattedtime=DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
-@RequiresApi(Build.VERSION_CODES.O)
-val time=currentTime.format(formattedtime)
+    val formattedtime = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val time = currentTime.format(formattedtime)
 
 
-
-    //val time=Timestamp.now()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -84,23 +85,22 @@ val time=currentTime.format(formattedtime)
     }
 
     private fun initUi() {
+        activity?.title=""
         db = FirebaseFirestore.getInstance()
         mAuth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
         storageRef = storage.reference
         user = mAuth.getCurrentUser()
-        categoryId= arguments?.getString("categoryid")
+        categoryId = arguments?.getString("categoryid")
 
-        Log.i("id add sub ","id"+categoryId)
+        Log.i("id add sub ", "id" + categoryId)
 
 //        subcategoryId=arguments?.getString("subcategoryid").toString()
 //        Log.i("id add subcat ","id"+subcategoryId)
 
 
-
-
         savebutton_add_details_fragment.setOnClickListener(View.OnClickListener {
-            newSubCategoryName=edittext_add_details_fragment.text.toString()
+            newSubCategoryName = edittext_add_details_fragment.text.toString()
             sendImageToFireStore()
 
         })
@@ -111,6 +111,7 @@ val time=currentTime.format(formattedtime)
         })
 
     }
+
     private fun chooseImage() {
         val options = arrayOf("Take Photo", "Choose From Gallery", "Cancel")
         val builder = MaterialAlertDialogBuilder(context)
@@ -143,7 +144,7 @@ val time=currentTime.format(formattedtime)
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             9347 -> if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-                 filepath = data.getData()
+                filepath = data.getData()
                 Log.i("image added from camera", resultCode.toString())
 
                 imageView_add_details_fragment.setImageURI(data.data)
@@ -189,8 +190,8 @@ val time=currentTime.format(formattedtime)
             .addOnSuccessListener {
                 url = it.toString()
                 Log.i("17/april/2020 image url", url)
-                    sendUrlToSubCategoryCollection()
-                    // sendDataToTimeline()
+                sendUrlToSubCategoryCollection()
+
 
                 if (url != null) {
                     Log.i("if mei aaye", "if mei aye")
@@ -211,13 +212,13 @@ val time=currentTime.format(formattedtime)
         db.collection("Subcategory").document(categoryId!!).collection("SubcategoryImages")
 
             .add(imageDetails as Map<*, *>)
-            .addOnSuccessListener {DocumentReference ->
+            .addOnSuccessListener { DocumentReference ->
                 val id1 = DocumentReference.id
-            sendDataToTimeline(id1)
+                sendDataToTimeline(id1)
 
-        Log.i("data added", "DocumentSnapshot added with ID")
-                snack= Snackbar.make(layout_add_details_fragment,"Uploaded",Snackbar.LENGTH_LONG)
-                snack.setAction("DISMISS",View.OnClickListener {
+                Log.i("data added", "DocumentSnapshot added with ID")
+                snack = Snackbar.make(layout_add_details_fragment, "Uploaded", Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS", View.OnClickListener {
                     System.out.println("snack clicked")
                 })
                 snack.show()
@@ -225,8 +226,8 @@ val time=currentTime.format(formattedtime)
             }
             .addOnFailureListener {
                 Log.i("data not added", "Error adding document")
-                snack= Snackbar.make(layout_add_details_fragment,"Failed",Snackbar.LENGTH_LONG)
-                snack.setAction("DISMISS",View.OnClickListener {
+                snack = Snackbar.make(layout_add_details_fragment, "Failed", Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS", View.OnClickListener {
                     System.out.println("snack clicked")
                 })
                 snack.show()
@@ -236,10 +237,11 @@ val time=currentTime.format(formattedtime)
 
     }
 
-    private fun sendDataToTimeline(ab:String){
-        val timelineDetails= hashMapOf(imageKey to url,titleKey to newSubCategoryName, "timestamp" to time)
-        db.collection("Timeline").document(ab)
-            .set(timelineDetails as Map<*,*>)
+    private fun sendDataToTimeline(id1: String) {
+        val timelineDetails =
+            hashMapOf(imageKey to url, titleKey to newSubCategoryName, timestamp to time)
+        db.collection("Timeline").document(id1)
+            .set(timelineDetails as Map<*, *>)
             .addOnCompleteListener {
                 Log.i("timeline data added", "DocumentSnapshot added with ID")
             }
@@ -249,13 +251,7 @@ val time=currentTime.format(formattedtime)
 
     }
 
-//    private fun openSubCategoryFragment(){
-//        val fragment= SubcategoryFragment()
-//        val fragmentTransaction=activity!!.supportFragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id.container,fragment)
-//        fragmentTransaction.addToBackStack(null)
-//        fragmentTransaction.commit()
-//    }
+
 }
 
 

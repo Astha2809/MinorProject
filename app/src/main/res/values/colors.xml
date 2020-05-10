@@ -3,4 +3,8 @@
     <color name="colorPrimary">#301934</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="white">#ffffff</color>
+    <color name="yellowish_orange">#F7F3960C</color>
+    <color name="lightpurple">#DCD1D1</color>
+    <color name="darkpurple">#947898</color>
 </resources>

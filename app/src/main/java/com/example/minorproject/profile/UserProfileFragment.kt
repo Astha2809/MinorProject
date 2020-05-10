@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.minorproject.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -36,6 +37,7 @@ class UserProfileFragment : Fragment() {
     lateinit var db: FirebaseFirestore
     lateinit var storageRef: StorageReference
     lateinit var mAuth: FirebaseAuth
+    lateinit var snack: Snackbar
     private var user: FirebaseUser? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +55,9 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun initUi() {
+        activity?.title = "Update Profile"
+
+
 
         db = FirebaseFirestore.getInstance()
         mAuth = FirebaseAuth.getInstance()
@@ -76,7 +81,7 @@ class UserProfileFragment : Fragment() {
         val builder = MaterialAlertDialogBuilder(context)
         with(builder) {
             setItems(options) { dialog, which ->
-                if (options[which].equals("TakePhoto")) {
+                if (options[which].equals("Take Photo")) {
                     dialog.dismiss()
                     val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     startActivityForResult(takePictureIntent, 9347)
@@ -107,7 +112,7 @@ class UserProfileFragment : Fragment() {
                 Log.i("image added from camera", resultCode.toString())
 
                 imageview_profile_fragment.setImageURI(data.data)
-                //sendImageToFireStore()
+
 
             }
 
@@ -120,7 +125,7 @@ class UserProfileFragment : Fragment() {
 
                 imageview_profile_fragment.setImageURI(data.data)
 
-                //sendImageToFireStore()
+
             }
         }
 
@@ -154,13 +159,13 @@ class UserProfileFragment : Fragment() {
 
 
                 if (url != null) {
-                    Log.i("if mei aaye", "if mei aye")
+
                     Glide.with(this.context!!).load(url).into(imageview_profile_fragment)
                     Log.i("profilepicture", url)
 
 
                 } else {
-                    Log.i("if mei ni  aaye", "if mei ni aye")
+                    Log.i("if is not working", "if mei ni aye")
                 }
             }
 
@@ -174,10 +179,22 @@ class UserProfileFragment : Fragment() {
             .set(user as Map<*, *>, SetOptions.merge())
             .addOnCompleteListener { documentReference ->
                 Log.i("data added", "DocumentSnapshot added with ID")
+                snack = Snackbar.make(linear_profile_fragment, "Uploaded", Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS", View.OnClickListener {
+                    System.out.println("snack clicked")
+                })
+                snack.show()
 
             }
             .addOnFailureListener { documentRefrence ->
                 Log.i("data not added", "Error adding document")
+
+                snack = Snackbar.make(linear_profile_fragment, "Failed", Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS", View.OnClickListener {
+                    System.out.println("snack clicked")
+                })
+                snack.show()
+
             }
     }
 

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="@dimen/textboxes_padding"
 
 
     android:orientation="vertical">
@@ -11,51 +10,47 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="4dp">
+        app:cardCornerRadius="@dimen/textview_margintop_timeline">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
-            android:padding="10dp">
+            android:background="@drawable/rounded_layout"
+            android:padding="@dimen/textboxes_padding">
 
             <ImageView
                 android:id="@+id/image_timeline"
                 android:layout_width="match_parent"
-                android:scaleType="fitXY"
-                android:layout_height="@dimen/login_edittext_margintop" />
+                android:layout_height="@dimen/login_edittext_margintop"
+
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/textview_timeline_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/image_timeline"
-                android:background="#301934"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:text="Name"/>
+                android:background="@drawable/side_nav_bar"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textview_timeline_date"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textview_timeline_name"
-                android:background="#301934"
+                android:layout_marginTop="@dimen/textview_margintop_timeline"
 
-                android:textStyle="bold"
-                android:textColor="#ffffff"
-                android:text="Date"
-                android:layout_marginTop="10dp"
-                />
+                android:background="@drawable/side_nav_bar"
+                android:textColor="@color/white"
 
-
+                android:textStyle="bold" />
 
 
         </RelativeLayout>
 
 
     </androidx.cardview.widget.CardView>
-
 
 
 </LinearLayout>

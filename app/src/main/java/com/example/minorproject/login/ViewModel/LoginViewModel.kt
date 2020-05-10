@@ -3,40 +3,41 @@ package com.example.minorproject.login.ViewModel
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.minorproject.common.FirebaseRepository
+import com.example.minorproject.R
+
 import com.example.minorproject.login.EMAIL_SCREEN
 import com.example.minorproject.login.PASSWORD_SCREEN
 
-import com.example.minorproject.repo.SignInRepo
+import com.example.minorproject.login.repo.SignInRepo
 import com.example.minorproject.utils.Validation
 import com.google.android.gms.tasks.OnCompleteListener
+
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel : ViewModel() {
     private var errMessage = MutableLiveData<String>()
     var signInRepo = SignInRepo()
-    var firebaseRepository = FirebaseRepository()
-    var isNewUser:Boolean=false
-    var currentScreen=MediatorLiveData<Int>()
-    //var onSuccess=MediatorLiveData<Boolean>()
-    var currentScreenVal= EMAIL_SCREEN
-   // lateinit var context: Context
-   var mAuth = FirebaseAuth.getInstance()
 
-    var userData: MutableLiveData<LoginModel> = MutableLiveData()
 
+    var isNewUser: Boolean = false
+    var currentScreen = MediatorLiveData<Int>()
+
+    var onSuccess1= MutableLiveData<Boolean>()
+    var currentScreenVal = EMAIL_SCREEN
+
+
+    var mAuth = FirebaseAuth.getInstance()
 
 
     fun getErrMessage(): LiveData<String> {
         return errMessage
     }
 
-    fun signUp(email: String, password: String,view: View) {
+    fun signUp(email: String, password: String): MutableLiveData<Boolean> {
         if (TextUtils.isEmpty(email)) {
 
             errMessage.value = "Empty email"
@@ -50,48 +51,40 @@ class LoginViewModel : ViewModel() {
             errMessage.value = "Empty Password"
 
         } else {
-            signInRepo.signUp(email, password,view)
+          onSuccess1=  signInRepo.signUp(email, password)
         }
-//        else if(TextUtils.isEmpty(password) {
-//            // Empty password
-//            errMessage.value = "empty password"
-//            return
-//        }
+        return onSuccess1
 
     }
 
 
-    fun isValidEmail(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
-    }
 
-    fun login(email: String, password: String,view:View) {
+    fun login(email: String, password: String): MutableLiveData<Boolean> {
 
-        if (TextUtils.isEmpty("Empty email")) {
+        if (TextUtils.isEmpty(email)) {
             errMessage.value = "Empty email"
-            return
-        }
-        else if (!Validation.isValidEmail(email)) {
+
+        } else if (!Validation.isValidEmail(email)) {
 
             errMessage.value = "Invalid Email Address"
 
         } else if (TextUtils.isEmpty(password)) {
 
-            errMessage.value = "Empty Password"
+            errMessage.value =  "Empty Password"
         }
-
-            else {
-            signInRepo.login(email, password,view)
-
-
+        else if(password <= 6.toString()){
+            errMessage.value =  "Password length should be greater than 6"
 
         }
+        else {
+          onSuccess1= signInRepo.login(email, password)
+
+
+        }
+        return onSuccess1
     }
 
-    //    fun loadUserData(username:String,useremail: String,userimage:String){
-//        signInRepo.loadUser(useremail, username, userimage)
-//    }
     fun check(email: String) {
         if (TextUtils.isEmpty(email)) {
 
@@ -126,17 +119,11 @@ class LoginViewModel : ViewModel() {
                         currentScreenVal = PASSWORD_SCREEN
                         currentScreen.value = currentScreenVal
 
-                        //Signup()
 
 
                     } else {
-                        //signup failed due to some aapi error
-                        // snack = Snackbar.make(linear_loginfragment, "cant signup", Snackbar.LENGTH_LONG)
-                        //snack.setAction("DISMISS", View.OnClickListener {
-                        System.out.println("snack clicked")
-                        //})
-                        //snack.show()
-                        Log.i("signup fail hogya", "signup failed")
+
+                        Log.i("signup fail", "signup failed")
 
 
                     }
@@ -149,10 +136,4 @@ class LoginViewModel : ViewModel() {
     }
 
 
-    fun loadData(): MutableLiveData<LoginModel> {
-        userData = firebaseRepository.loadUserData()
-        Log.i("user", userData.toString())
-        return userData
-
-    }
 }

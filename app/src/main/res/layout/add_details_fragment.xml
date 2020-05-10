@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_add_details_fragment"
     android:layout_width="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/white"
     android:layout_height="match_parent"
     >
 
@@ -18,11 +18,11 @@
 
     <ImageButton
         android:id="@+id/imageView_add_details_fragment"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginLeft="144dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="@dimen/imageview_width"
+        android:layout_height="@dimen/imageview_width"
+        android:layout_marginStart="@dimen/imageview_marginstart_add_details_fragment"
+        android:layout_marginLeft="@dimen/imageview_marginstart_add_details_fragment"
+        android:layout_marginTop="@dimen/imageview_margintop_add_details_fragment"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidline_center_adddetailsfragment"
@@ -42,7 +42,7 @@
         android:background="@drawable/rounded_text"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="Image Name"
+        android:hint="@string/image_name"
         app:layout_constraintBottom_toTopOf="@+id/guidline_center_adddetailsfragment"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -53,7 +53,7 @@
         android:layout_marginStart="@dimen/button_sidemargins"
         android:layout_marginLeft="@dimen/button_sidemargins"
         android:layout_marginBottom="92dp"
-        android:text="Save "
+        android:text="@string/save"
         app:layout_constraintBottom_toTopOf="@+id/edittext_add_details_fragment"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

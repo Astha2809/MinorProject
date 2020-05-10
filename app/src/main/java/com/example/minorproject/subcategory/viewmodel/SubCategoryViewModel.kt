@@ -7,20 +7,19 @@ import androidx.lifecycle.ViewModel
 import com.example.minorproject.common.FirebaseRepository
 import com.example.minorproject.category.viewmodel.CategoryModel
 
-class SubCategoryViewModel :ViewModel(){
-    var firebaseRepository= FirebaseRepository()
+class SubCategoryViewModel : ViewModel() {
+    var firebaseRepository = FirebaseRepository()
 
-    var subCategoryData:MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
-
-//    init {
-//        loadSubCategoryToRecycler()
-//    }
+    var subCategoryData: MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
 
 
-    fun loadSubCategoryToRecycler(categyid:String,subcategoryid:String): LiveData<ArrayList<CategoryModel>> {
-        subCategoryData=firebaseRepository.loadSubCategoryToRecycler(categyid,subcategoryid)
+    fun loadSubCategoryToRecycler(
+        categyid: String,
+        subcategoryid: String
+    ): LiveData<ArrayList<CategoryModel>> {
+        subCategoryData = firebaseRepository.loadSubCategoryToRecycler(categyid, subcategoryid)
 
-        Log.i("subcategory",subCategoryData.toString())
+        Log.i("subcategory", subCategoryData.toString())
         return subCategoryData
     }
 

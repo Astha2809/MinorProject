@@ -2,6 +2,7 @@ package com.example.minorproject.category_detail
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -33,11 +34,11 @@ class AddCategoryFragment : Fragment() {
     lateinit var mAuth: FirebaseAuth
     private var user: FirebaseUser? = null
     private var filepath: Uri? = null
-     lateinit var url: String
-    var uid: String?=null
-    var titleKey:String="categorytitle"
-    var imageKey:String="categorynameimage"
-    var isCategory:Boolean=true
+    lateinit var url: String
+    var uid: String? = null
+    var titleKey: String = "categorytitle"
+    var imageKey: String = "categorynameimage"
+    var isCategory: Boolean = true
     lateinit var snack: Snackbar
 
 
@@ -60,36 +61,32 @@ class AddCategoryFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //Log.i("on create", "on create")
 
-        arguments?.let{
-            isCategory= it.getBoolean("isCategory")
+
+        arguments?.let {
+            isCategory = it.getBoolean("isCategory")
             Log.i("on create", "on create")
 
-            if (!isCategory){
+            if (!isCategory) {
                 Log.i("if is category", isCategory.toString())
-                imageKey="subcategoryimage"
-                titleKey="subcategorytitle"
-            }
-            else{
+                imageKey = "subcategoryimage"
+                titleKey = "subcategorytitle"
+            } else {
                 Log.i("is categoryindetails", isCategory.toString())
             }
         }
-
-
 
 
     }
 
 
     private fun initUi() {
+        activity?.title=""
         db = FirebaseFirestore.getInstance()
         mAuth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
         storageRef = storage.reference
         user = mAuth.getCurrentUser()
-//     val aa: Task<QuerySnapshot> =  db.collection("categorynameimages").get("zmyrYKq4FTZEk9tI6I2ZB8q5wzh1")
-//            db.collection("categorynameimages")
 
 
         val aa = db.collection("categorynameimages")
@@ -126,11 +123,12 @@ class AddCategoryFragment : Fragment() {
                 } else if (options[which] == "Choose From Gallery") {
                     dialog.dismiss()
                     val takeImageFromGallery = Intent(
-                        Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
                     startActivityForResult(takeImageFromGallery, 8516)
                     Log.i("REquest code", targetRequestCode.toString())
-                }
-                else if (options[which] == "Cancel") {
+                } else if (options[which] == "Cancel") {
                     dialog.dismiss()
                 }
             }
@@ -174,7 +172,7 @@ class AddCategoryFragment : Fragment() {
     }
 
     private fun sendImageToFireStore() {
-         uid = mAuth.currentUser?.uid
+        uid = mAuth.currentUser?.uid
         if (filepath != null) {
             val imageRef = storageRef.child("images/" + UUID.randomUUID().toString())
 
@@ -197,12 +195,11 @@ class AddCategoryFragment : Fragment() {
             .addOnSuccessListener {
                 url = it.toString()
                 Log.i("17/april/2020 image url", url)
-               if (!isCategory) {
-                   Log.i("sub cat called", "sub cat called")
-                    //sendUrlToSubCategoryCollection()
-                }
-                else{
-                   Log.i("catg called", "catg called")
+                if (!isCategory) {
+                    Log.i("sub cat called", "sub cat called")
+
+                } else {
+                    Log.i("catg called", "catg called")
                     sendUrlToCategoryCollection()
                 }
                 if (url != null) {
@@ -221,15 +218,15 @@ class AddCategoryFragment : Fragment() {
     }
 
     private fun sendUrlToCategoryCollection() {
-        val imageDetails = hashMapOf(imageKey to url, titleKey to newCategoryName,"imageid" to uid)
+        val imageDetails = hashMapOf(imageKey to url, titleKey to newCategoryName, "imageid" to uid)
         db.collection("categorynameimages")
 
             .add(imageDetails as Map<*, *>)
             .addOnCompleteListener {
-                //openCategoryListFragment()
+
                 Log.i("data added", "DocumentSnapshot added with ID")
-                snack= Snackbar.make(layout_add_details_fragment,"Uploaded",Snackbar.LENGTH_LONG)
-                snack.setAction("DISMISS",View.OnClickListener {
+                snack = Snackbar.make(layout_add_details_fragment, "Uploaded", Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS", View.OnClickListener {
                     System.out.println("snack clicked")
                 })
                 snack.show()
@@ -238,8 +235,8 @@ class AddCategoryFragment : Fragment() {
             }
             .addOnFailureListener {
                 Log.i("data not added", "Error adding document")
-                snack= Snackbar.make(layout_add_details_fragment,"Failed",Snackbar.LENGTH_LONG)
-                snack.setAction("DISMISS",View.OnClickListener {
+                snack = Snackbar.make(layout_add_details_fragment, "Failed", Snackbar.LENGTH_LONG)
+                snack.setAction("DISMISS", View.OnClickListener {
                     System.out.println("snack clicked")
                 })
                 snack.show()
@@ -247,18 +244,6 @@ class AddCategoryFragment : Fragment() {
             }
     }
 
-
-
-//    private fun openCategoryListFragment(){
-//        val fragment= CategoryListFragment()
-//        val fragmentTransaction= activity?.supportFragmentManager?.beginTransaction()
-//        if (fragmentTransaction != null) {
-//            fragmentTransaction.replace(R.id.container,fragment)
-//            fragmentTransaction.addToBackStack(null)
-//            fragmentTransaction.commit()
-//        }
-//
-//    }
 
 }
 

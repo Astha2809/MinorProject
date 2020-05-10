@@ -30,15 +30,13 @@ const val subCategoryListScreen: Int = 1
 class CategoryListFragment : Fragment() {
     lateinit var mAuth: FirebaseAuth
     lateinit var database: FirebaseFirestore
-    lateinit var storageRef: StorageReference
+
     private lateinit var storage: FirebaseStorage
     lateinit var categoryViewModel: CategoryViewModel
     private lateinit var categryList: LiveData<ArrayList<CategoryModel>>
     var currentScreen = categoryListScreen
     var isCategory: Boolean = true
     var adapter: Adapter? = null
-
-
 
 
     lateinit var rootview: View
@@ -60,7 +58,7 @@ class CategoryListFragment : Fragment() {
 
 
     private fun initUi() {
-
+        activity?.title = "Categories"
         database = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
         adapter = context?.let {
@@ -85,17 +83,7 @@ class CategoryListFragment : Fragment() {
         }
 
 
-        // categryList=categoryViewModel.getSavedDetails()
 
-//            /if(isCategory){
-//               // categryList = loadImages()
-//                //categryList=categoryViewModel.getSavedDetails()
-//            }
-//            else{
-//                categryList=loadSubCategoryImages()
-//            }
-//            val categoryListFragmentAdapter =
-//                context?.let { CategoryListFragmentAdapter(it, categryList!!) }
         recycler.adapter = adapter
 
 
@@ -113,18 +101,15 @@ class CategoryListFragment : Fragment() {
 
 
         })
-//        image_categorylist.setOnClickListener(View.OnClickListener {
-//            catogary_content_list.visibility = View.INVISIBLE
-//        })
 
 
     }
 
 
-    //funtion to replace addcategorydetails fragment to open new fragment for adding title and image of catogary
+
     fun openAddDetailsFragment() {
         val addDetailsFragment = AddCategoryFragment()
-        //?why to write activity here?
+
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
         if (fragmentTransaction != null) {
             fragmentTransaction.add(R.id.container, addDetailsFragment)
@@ -133,9 +118,7 @@ class CategoryListFragment : Fragment() {
         }
 
 
-
     }
-
 
 
 }

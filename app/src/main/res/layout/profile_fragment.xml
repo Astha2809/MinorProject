@@ -4,19 +4,21 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
+    android:id="@+id/linear_profile_fragment"
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_marginTop="@dimen/textbox_margintop"
-        android:background="#947898"
+        android:background="@color/darkpurple"
         android:orientation="vertical">
 
     <ImageButton
         android:layout_marginTop="@dimen/textbox_margintop"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="@dimen/imageview_width"
+        android:layout_height="@dimen/imageview_width"
         android:layout_gravity="center"
+        android:src="@drawable/ic_face_black_24dp"
         android:scaleType="fitXY"
         android:id="@+id/imageview_profile_fragment"/>
 
@@ -31,7 +33,7 @@
         android:background="@drawable/rounded_text"
         android:padding="@dimen/textboxes_padding"
         android:textStyle="bold"
-        android:hint="User Name"
+        android:hint="@string/user_name"
         android:layout_marginLeft="@dimen/textboxes_sides_margin"
         android:layout_marginRight="@dimen/textboxes_sides_margin"
         android:layout_marginTop="@dimen/textbox_margintop"
@@ -43,6 +45,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/textbox_margintop"
         android:layout_gravity="center"
-        android:text="Save" />
+        android:text="@string/save" />
 
 </LinearLayout>

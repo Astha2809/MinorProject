@@ -30,15 +30,21 @@ class DisplaySubCategoryFragment : Fragment() {
     }
 
     private fun initUi() {
+
+        var title = arguments?.getString("subcategorytitle")
         var catid = arguments?.getString("categoryid")
         var subcatid = arguments?.getString("subcategoryid")
+
+        activity?.title = title
+
         val db = FirebaseFirestore.getInstance().collection("Subcategory").document(catid!!)
+
         val documentReference = db.collection("SubcategoryImages").document(subcatid!!)
         documentReference.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
 
             val imageUrl: String? = documentSnapshot?.getString("subcategoryurl")
 
-            //Glide.with()
+
             Glide.with(this).load(imageUrl).into(imageview_display_subcategory)
         }
 
@@ -57,7 +63,7 @@ class DisplaySubCategoryFragment : Fragment() {
                             bundle.putString("categoryid", catid)
                             bundle.putString("subcategoryid", subcatid)
 
-                            subcategoryfragment.arguments=bundle
+                            subcategoryfragment.arguments = bundle
                             val fragmentTransaction =
                                 (context as MainActivity).supportFragmentManager.beginTransaction()
                             fragmentTransaction.replace(R.id.container, subcategoryfragment)
@@ -69,9 +75,6 @@ class DisplaySubCategoryFragment : Fragment() {
                 }
 
         })
-
-
-
 
 
     }

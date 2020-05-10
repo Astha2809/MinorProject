@@ -15,4 +15,11 @@
     <string name="enter_email">Enter Email</string>
     <string name="enter_password">enter password</string>
     <string name="buttontext_login_next">Next</string>
+    <string name="image_name">Image Name</string>
+    <string name="save">Save</string>
+    <string name="my_gallery">My Gallery</string>
+    <string name="user_name">User Name</string>
+    <string name="empty_email">Empty email</string>
+    <string name="empty_password">Empty Password</string>
+    <string name="invalid_email_address">Invalid Email Address</string>
 </resources>

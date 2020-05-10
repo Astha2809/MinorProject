@@ -16,8 +16,6 @@ class FirebaseRepository {
     var subCategoryLiveData: MutableLiveData<ArrayList<CategoryModel>> = MutableLiveData()
     var timelineLiveData: MutableLiveData<ArrayList<TimelineModel>> = MutableLiveData()
     var userLiveData: MutableLiveData<LoginModel> = MutableLiveData()
-
-    // var items = LoginModel()
     var userEmail: String? = null
     var userName: String? = null
     var userImage: String? = null
@@ -140,40 +138,7 @@ class FirebaseRepository {
         return timelineLiveData
     }
 
-    /* fun loadUserData(): MutableLiveData<LoginModel> {
-         database.collection("userdetails").document(mAuth.currentUser!!.uid).get()
-             .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
-                 if (e != null) {
-                     Log.i("listen failed", "Listen failed.", e)
-                     userLiveData.value = null
-                     return@EventListener
-                 }
-                 if (value != null) {
-                     for (document: QueryDocumentSnapshot in value) {
-                         userEmail = document.data.get("email").toString()
-                         userName = document.data.get("username").toString()
-                         userImage = document.data.get("profile picture").toString()
-                         Log.i("useremail", userEmail)
-                         Log.i("username", userName)
-                         Log.i("userimage", userImage)
-                         items =
-                             LoginModel(
-                                 userEmail,
-                                 userName,
-                                 userImage
-                             )
 
-                         Log.i("DATA ADDED", items.toString())
-                         //}
-
-                     }
-                     userLiveData.value = items
-                 }
-
-             })
-
-         return userLiveData
-     }*/
 
     fun loadUserData(): MutableLiveData<LoginModel> {
         val documentReference: DocumentReference =

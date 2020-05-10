@@ -10,4 +10,21 @@
     <dimen name="textbox_margintop">30dp</dimen>
     <dimen name="button_sidemargins">160dp</dimen>
     <dimen name="login_edittext_margintop">180dp</dimen>
+    <dimen name="textview_margintop_timeline">2dp</dimen>
+    <dimen name="imageview_width">160dp</dimen>
+    <dimen name="imageview_marginstart_add_details_fragment">144dp</dimen>
+    <dimen name="imageview_margintop_add_details_fragment">52dp</dimen>
+    <dimen name="relativelayout_padding_catogary_content_list">10dp</dimen>
+    <dimen name="imageview_height_category_content_list">120dp</dimen>
+    <dimen name="imageview_marginLeft_category_content_list">8dp</dimen>
+    <dimen name="imageview_marginTop_category_content_list">5dp</dimen>
+    <dimen name="imageview_width_display_subcategory">304dp</dimen>
+    <dimen name="imageview_height_display_subcategory">504dp</dimen>
+    <dimen name="imageview_margins_display_subcategory">60dp</dimen>
+    <dimen name="imageview_width_login_fragment">120dp</dimen>
+    <dimen name="text_size">20sp</dimen>
+    <dimen name="edit_text_margintop_login_fragment">40dp</dimen>
+    <dimen name="linear_layout_height_login_fragment">250dp</dimen>
+    <dimen name="linear_layout_margintop_login_fragment">60dp</dimen>
+    <dimen name="imageview_width_nav_header">80dp</dimen>
 </resources>

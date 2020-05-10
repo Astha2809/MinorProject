@@ -31,10 +31,6 @@ class TimelineFragment :Fragment(){
         return rootView
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        initUi()
-//        super.onActivityCreated(savedInstanceState)
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initUi()
@@ -42,6 +38,7 @@ class TimelineFragment :Fragment(){
     }
 
     private fun initUi(){
+        activity?.title = "Timeline"
        timelineAdapter=context?.let { TimelineAdapter(it) }
         timeline_recycler.layoutManager=LinearLayoutManager(this.context)
         timeline_recycler.setHasFixedSize(true)

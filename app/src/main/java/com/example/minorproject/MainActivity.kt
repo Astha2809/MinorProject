@@ -23,6 +23,7 @@ import com.example.minorproject.login.LoginFragment
 import com.example.minorproject.profile.DisplayUserDetailsFragment
 import com.example.minorproject.profile.UserProfileFragment
 import com.example.minorproject.timeline.ui.TimelineFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,16 +32,14 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var headerView: View
-    lateinit var sp: SharedPreferences
+
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     var mAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
-        getSupportActionBar()?.hide(); // hide the title bar
+
 
         setContentView(R.layout.activity_main)
 
@@ -55,13 +54,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
-        //val fab: FloatingActionButton = findViewById(R.id.fab)
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
-//
-        //var navigationView:NavigationView
+
 
         nav_view.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -87,11 +80,7 @@ class MainActivity : AppCompatActivity() {
                     openDisplayProfile()
                     return@setNavigationItemSelectedListener true
                 }
-                R.id.textView_useremail_nav_header -> {
-                    Log.i("nav bar", "textviewclicked")
-                    openTImelineFragment()
-                    return@setNavigationItemSelectedListener true
-                }
+
                 else -> {
                     Toast.makeText(applicationContext, "Logoutclicked", Toast.LENGTH_SHORT).show()
                     Log.i("nav bar", "Logoutclicked")
@@ -105,16 +94,13 @@ class MainActivity : AppCompatActivity() {
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_profile, R.id.nav_timeline, R.id.nav_logout
             ), drawerLayout
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        //navView.setupWithNavController(navController)
+
     }
 
 
@@ -124,10 +110,6 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
 
 
     private fun openLoginFragment() {
@@ -178,13 +160,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun openCategoryFragment() {
-        val categoryListFragment = CategoryListFragment()
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.container, categoryListFragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
-    }
 
 }
 
